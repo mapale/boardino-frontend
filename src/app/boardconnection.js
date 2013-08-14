@@ -1,11 +1,17 @@
 /* globals define:false, io:false, window:false, $:false */
-define("boardconnection",[
+define("src/app/boardconnection",[
+
+
+
 
 ], 
 
-function(connectedUsers, BoardMessageHandler){
+function(){
+    var connectedUsers, BoardMessageHandler;
 
     var BoardConnection = function(board_id, boardMessageHandler) {
+
+
 
         /*this.pusher = new Pusher('32b728d173f152c58554');
         var channel = this.pusher.subscribe('test_channel');
@@ -189,4 +195,5 @@ function(connectedUsers, BoardMessageHandler){
         }
     };
     return BoardConnection;
+    
 });
