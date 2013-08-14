@@ -1,0 +1,20 @@
+{
+  "name": "backbone_boardino",
+  "description": "",
+  "version": "0.1.0",
+  "homepage": "http://www.boardino.com",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:mapale/boardino-frontend.git"
+  },
+  "scripts": {
+    "test": "grunt test"
+  },
+  "devDependencies": {
+    "grunt": "~0.4.0",
+    "grunt-contrib-jasmine": "~0.4.0",
+    "grunt-contrib-jshint": "~0.2.0",
+    "grunt-template-jasmine-requirejs": "~0.1.5"
+  },
+  "dependencies": {}
+}
