@@ -1,7 +1,11 @@
-define([
-], function(){
+/* globals define:false, io:false, window:false, $:false */
+define("boardconnection",[
 
-    BoardConnection = function(board_id, boardMessageHandler) {
+], 
+
+function(connectedUsers, BoardMessageHandler){
+
+    var BoardConnection = function(board_id, boardMessageHandler) {
 
         /*this.pusher = new Pusher('32b728d173f152c58554');
         var channel = this.pusher.subscribe('test_channel');
@@ -10,7 +14,7 @@ define([
             alert(data.message);
         });*/
 
-        this.ws = io.connect('http://23.21.155.34:8888');
+        this.ws = io.connect( 'http://' + window.location.hostname + ':8888' );
 
         var _this = this;
         this.ws.on('connect', function () {
@@ -26,7 +30,9 @@ define([
     };
 
     BoardConnection.prototype.send = function(message, args){
-        if (!args["channel_id"]) args["channel_id"] = this.board_id;
+        if (!args["channel_id"]) {
+            args["channel_id"] = this.board_id;
+        }
         this.ws.send(JSON.stringify({
             "type": message,
             "args": args
@@ -131,8 +137,9 @@ define([
                 boardView.finishPath(args["id"]);
             },
             "new" : function(args){
-                if(args["obj"]=="postit")
+                if(args["obj"]==="postit") {
                     boardView.showPostit(args["id"]);
+                }
             },
             "update" : function(args){
                 boardView.updatePostitText(args["id"], args["text"]);
@@ -144,10 +151,11 @@ define([
                 boardView.resizePostit(args["id"], args["w"], args["h"]);
             },
             "delete" : function(args){
-                if(args["obj"]=="postit")
+                if(args["obj"]==="postit") {
                     boardView.deletePostit(args["id"]);
-                else
+                } else {
                     boardView.deleteLine(args["id"]);
+                }
             },
             "change_color" : function(args){
                 boardView.changePostitColor(args["id"], args["back_color"]);
@@ -161,14 +169,14 @@ define([
                 $("#connected_users").text(connectedUsers);
                 $("<div/>").addClass("user_connected")
                         .appendTo($("#notifications")).text("1 user joined!").show('slow')
-                        .hide(4000, function(){$(this).remove()});
+                        .hide(4000, function(){$(this).remove();});
             },
             "disconnect": function(args){
                 connectedUsers--;
                 $("#connected_users").text(connectedUsers);
                 $("<div/>").addClass("user_disconnected")
                         .appendTo($("#notifications")).text("1 user left!").show('slow')
-                        .hide(4000, function(){$(this).remove()});
+                        .hide(4000, function(){$(this).remove();});
             }
         };
 
@@ -176,12 +184,9 @@ define([
 
     BoardMessageHandler.prototype.handle = function(message){
         var messageType = message["type"];
-        if(this.handlers[messageType])
+        if(this.handlers[messageType]) {
             this.handlers[messageType](message["args"]);
+        }
     };
-
     return BoardConnection;
 });
-
-
-

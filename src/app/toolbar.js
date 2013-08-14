@@ -1,3 +1,4 @@
+/* globals $:false */
 function Toolbar(){
     this.tools = [];
 }
