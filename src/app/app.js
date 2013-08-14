@@ -1,11 +1,19 @@
-define([
+/* globals $:false, define:false, document:false, window:false */
+define("app",[
   'views/board',
   'views/canvas',
-  'boardconnection'
-], function(BoardView, BoardCanvas, BoardConnection){
+  'boardconnection',
+  'boardmessagehandler',
+  'toolbar'
+
+], 
+
+function(BoardView, BoardCanvas, BoardConnection, BoardMessageHandler, Toolbar){
     var initialize = function(){
 
-        var boardView = new BoardView();
+        var boardConnection, boardView, board_id, connectedUsers;// Added
+
+        boardView = new BoardView();
         boardView.render();
 
         function initBoard(){
