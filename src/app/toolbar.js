@@ -1,4 +1,4 @@
-/* globals $:false */
+/* globals jQuery:false */
 function Toolbar(){
     this.tools = [];
 }
@@ -20,7 +20,7 @@ Toolbar.prototype.addTool = function(tool){
         this.click(function(){
             if(settings.exclusive){
                 $.each(toolbar.tools, function(i, otherTool){
-                    otherTool.element.attr({'class': otherTool.disabledClass})
+                    otherTool.element.attr({'class': otherTool.disabledClass});
                 });
             }
             $(this).attr({'class':settings.enabledClass});
@@ -36,8 +36,9 @@ Toolbar.prototype.addTool = function(tool){
                                             }
                                         }
                                     });
-            }else
+            } else {
                 settings.action();
+            }
         });
 
         return settings;
