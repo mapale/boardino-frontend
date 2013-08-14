@@ -5,7 +5,7 @@ module.exports = function(grunt) {
   grunt.initConfig({
 
     jasmine : {
-      src : 'src/app/javascripts/modules/*.js',
+      src : 'src/app/**/*.js',
       options : {
         specs : 'spec/**/*.js',
         helpers: 'spec/**/*Helper.js',
@@ -13,10 +13,14 @@ module.exports = function(grunt) {
         templateOptions: {
           requireConfigFile: 'src/config.js',
           requireConfig: {
-            baseUrl: './src/app/javascripts/',
+            baseUrl: '',
             paths: {
-                "jquery": "./vendor/jquery",
-                "backbone": "./vendor/backbone"
+                "jquery": "src/assets/vendor/jquery",
+                "backbone": "src/assets/vendor/backbone-min"
+            },
+            deps: ['jquery'],
+            callback: function($) {
+                console.log("Jquery Version", $.fn.jquery);
             }
           }
         }
