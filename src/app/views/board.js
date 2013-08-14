@@ -1,9 +1,11 @@
 define([
+    'jquery',
+    'backbone',
     'views/postit',
     'views/canvas',
     'models/postit',
     'collections/postits'
-], function(PostitView, BoardCanvas, Postit, PostitList){
+], function($, Backbone, PostitView, BoardCanvas, Postit, PostitList){
     var BoardView = Backbone.View.extend({
         el: $("#board"),
 
@@ -26,13 +28,13 @@ define([
         },
 
         mousedown: function(e){
-            if(this.tool=="drawing")
+            if(this.tool === "drawing")
                 this.canvas.startLine(e.pageX, e.pageY, "free");
-            if(this.tool=="rectDrawing")
+            if(this.tool === "rectDrawing")
                 this.canvas.startLine(e.pageX, e.pageY, "rect");
-            if(this.tool=="eraser")
+            if(this.tool === "eraser")
                 this.canvas.tryToErase(e.pageX, e.pageY);
-            if(this.tool=="postits"){
+            if(this.tool === "postits"){
                 var postit = new Postit({"x":e.pageX, "y":e.pageY, "width":120, "height":120, "text":""});
                 postits.add(postit);
                 postit.save(null, {

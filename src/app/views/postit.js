@@ -1,5 +1,7 @@
 define([
-], function(){
+    'jquery',
+    'backbone'
+], function($, Backbone){
     var PostitView = Backbone.View.extend({
         tagName: "div",
 

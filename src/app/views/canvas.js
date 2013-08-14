@@ -1,7 +1,9 @@
 define([
+    'jquery',
+    'backbone',
     'models/line',
     'collections/lines'
-], function(Line, LineList){
+], function($, Backbone, Line, LineList){
     var BoardCanvas = Backbone.View.extend({
         el: $("#board-canvas"),
 

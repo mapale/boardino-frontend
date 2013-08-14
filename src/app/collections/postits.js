@@ -1,6 +1,7 @@
 define([
+  'backbone',
   'models/postit'
-], function(Postit){
+], function(Backbone, Postit){
     var PostitList = Backbone.Collection.extend({
         model: Postit,
         url: "api/boards/"+board_id+"/postits/"

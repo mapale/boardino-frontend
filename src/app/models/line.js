@@ -1,5 +1,6 @@
 define([
-], function(){
+    'backbone'
+], function(Backbone){
     var Line = Backbone.Model.extend({
         urlRoot: "api/boards/"+board_id+"/lines/",
 

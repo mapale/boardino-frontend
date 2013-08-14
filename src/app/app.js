@@ -1,5 +1,6 @@
 /* globals $:false, define:false, document:false, window:false */
 define("app",[
+  'jquery',
   'views/board',
   'views/canvas',
   'boardconnection',
@@ -8,7 +9,7 @@ define("app",[
 
 ], 
 
-function(BoardView, BoardCanvas, BoardConnection, BoardMessageHandler, Toolbar){
+function($, BoardView, BoardCanvas, BoardConnection, BoardMessageHandler, Toolbar){
     var initialize = function(){
 
         var boardConnection, boardView, board_id, connectedUsers;// Added
