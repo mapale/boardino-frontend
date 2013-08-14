@@ -20,7 +20,7 @@ define([
             this.canvas = new BoardCanvas(),
             this.canvas.render();
 
-            postits = new PostitList();
+            var postits = new PostitList();
             postits.bind('add', this.addOne, this);
             postits.bind('reset', this.addAll, this);
             postits.bind('all', this.render, this);
@@ -28,15 +28,18 @@ define([
         },
 
         mousedown: function(e){
-            if(this.tool === "drawing")
+            if (this.tool === "drawing") {
                 this.canvas.startLine(e.pageX, e.pageY, "free");
-            if(this.tool === "rectDrawing")
+            }
+            if (this.tool === "rectDrawing") {
                 this.canvas.startLine(e.pageX, e.pageY, "rect");
-            if(this.tool === "eraser")
+            }
+            if (this.tool === "eraser") {
                 this.canvas.tryToErase(e.pageX, e.pageY);
-            if(this.tool === "postits"){
+            }
+            if (this.tool === "postits") {
                 var postit = new Postit({"x":e.pageX, "y":e.pageY, "width":120, "height":120, "text":""});
-                postits.add(postit);
+                postits.add(postit);//TODO: check what is this doing
                 postit.save(null, {
                     success: function(model, response){
                         boardConnection.newPostit(model.get("id"), postit.get("x"), postit.get("y"), postit.get("width"), postit.get("height"), postit.get("text"));
@@ -48,19 +51,19 @@ define([
         },
 
         mouseMove: function(e){
-            if(this.tool=="drawing" || this.tool=="rectDrawing"){
+            if(this.tool === "drawing" || this.tool === "rectDrawing"){
                 this.canvas.mouseMove(e);
             }
         },
 
         mouseUp: function(e){
-            if(this.tool=="drawing" || this.tool=="rectDrawing"){
+            if(this.tool === "drawing" || this.tool === "rectDrawing"){
                 this.canvas.finishLine(e);
             }
         },
 
         showPostit: function(id){
-            postit = new Postit({id:id});
+            var postit = new Postit({id:id});
             postit.fetch();
             postits.add(postit);
         },

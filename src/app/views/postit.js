@@ -81,7 +81,7 @@ define([
         createPostitCloseElement: function(){
             return $("<img/>")
                     .addClass("postit_close_image")
-                    .attr("src", "/static/images/close.png")
+                    .attr("src", "/static/images/close.png");
         },
 
         deletePostit: function(){
@@ -117,7 +117,7 @@ define([
             var postitChangeColorTool = $("<div />")
                     .addClass("postit_color_tool");
             postitChangeColorTool.mouseout(function() {
-                postitChangeColorTool.hide()
+                postitChangeColorTool.hide();
             });
             this.createColorSelectionElement("#FFFF33", "left").appendTo(postitChangeColorTool);
             this.createColorSelectionElement("#FF69B4", "right").appendTo(postitChangeColorTool);

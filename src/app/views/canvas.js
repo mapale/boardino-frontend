@@ -1,9 +1,10 @@
 define([
     'jquery',
     'backbone',
+    'underscore',
     'models/line',
     'collections/lines'
-], function($, Backbone, Line, LineList){
+], function($, Backbone, _, Line, LineList){
     var BoardCanvas = Backbone.View.extend({
         el: $("#board-canvas"),
 
@@ -59,7 +60,7 @@ define([
         mouseMove: function(e){
             var _this = this;
             setTimeout(function() {
-                if(_this.line && e.which==1 && _this.line.type == "free"){
+                if(_this.line && e.which === 1 && _this.line.type  ===  "free"){
                     _this.line.path.add(new paper.Point(e.pageX, e.pageY));
                     boardConnection.addPathPoint(_this.line.get("id"), e.pageX, e.pageY);
                 }
@@ -68,7 +69,7 @@ define([
         },
 
         finishLine: function(e){
-            if(this.line.type=="rect"){
+            if(this.line.type === "rect"){
                 this.line.path.add(new paper.Point(e.pageX, e.pageY));
                 boardConnection.addPathPoint(this.line.get("id"), e.pageX, e.pageY);
             }
@@ -133,8 +134,9 @@ define([
 
         clearLines: function(color){
             _.chain(this.lines.models).clone().each(function(model){
-                if(model.path)
+                if (model.path) {
                     model.path.remove();
+                }
                 model.destroy();
                 boardConnection.deleteLine(model.get("id"));
             });
