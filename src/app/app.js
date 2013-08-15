@@ -3,7 +3,7 @@ define("app",[
   'jquery',
   'views/board',
   'views/canvas',
-  'boardconnection',
+  'src/app/boardconnection',
   'boardmessagehandler',
   'toolbar',
   'src/app/utils'
