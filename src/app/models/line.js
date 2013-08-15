@@ -1,3 +1,4 @@
+/*globals define:false*/
 define([
     'backbone',
     'src/app/utils'

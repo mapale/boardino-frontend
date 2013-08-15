@@ -1,3 +1,4 @@
+/*globals define:false*/
 define([
   'backbone',
   'models/line',
