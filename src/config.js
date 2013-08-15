@@ -7,10 +7,10 @@ requirejs.config({
       "http://code.jquery.com/jquery-1.9.1",
       "assets/vendor/jquery"
     ],
-    backbone: "assets/vendor/backbone-min",
-    underscore: "assets/vendor/underscore-min",
-    json2: "assets/vendor/json2",
-    paper: "assets/vendor/paper"
+    backbone: "src/assets/vendor/backbone-min",
+    underscore: "src/assets/vendor/underscore-min",
+    json2: "src/assets/vendor/json2",
+    paper: "src/assets/vendor/paper"
   },
   shim: {
     underscore: {

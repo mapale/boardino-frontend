@@ -1,7 +1,7 @@
 /*globals define:false*/
 define([
   'backbone',
-  'models/postit',
+  'src/app/models/postit',
   'src/app/utils'
 ], function(Backbone, Postit, Utils){
     var boardId = Utils.getBoardId();

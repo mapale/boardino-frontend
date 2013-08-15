@@ -4,8 +4,8 @@ define([
     'backbone',
     'underscore',
     'paper',
-    'models/line',
-    'collections/lines'
+    'src/app/models/line',
+    'src/app/collections/lines'
 ], function($, Backbone, _, paper, Line, LineList){
     var BoardCanvas = Backbone.View.extend({
         el: $("#board-canvas"),

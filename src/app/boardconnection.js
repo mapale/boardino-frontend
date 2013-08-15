@@ -1,7 +1,6 @@
 /* globals define:false, io:false, window:false, $:false */
 define("src/app/boardconnection",[
     'jquery'
-
 ],
 
 function($) {
