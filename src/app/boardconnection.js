@@ -1,15 +1,16 @@
 /* globals define:false, io:false, window:false, $:false */
 define("src/app/boardconnection",[
     'jquery'
-], 
 
-function($){
+],
+
+function($) {
+
+    'use strict';
+
     var connectedUsers, BoardMessageHandler;
 
-    var BoardConnection = function(board_id, boardMessageHandler) {
-
-
-
+    function BoardConnection(board_id, boardMessageHandler) {
         /*this.pusher = new Pusher('32b728d173f152c58554');
         var channel = this.pusher.subscribe('test_channel');
 
@@ -26,7 +27,7 @@ function($){
                 boardMessageHandler.handle($.parseJSON(msg));
             });
         });
-    };
+    }
 
     BoardConnection.prototype.disconnect = function(){
         this.ws.disconnect();
@@ -191,6 +192,7 @@ function($){
             this.handlers[messageType](message["args"]);
         }
     };
+
+
     return BoardConnection;
-    
 });
