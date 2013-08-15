@@ -5,14 +5,17 @@ define("app",[
   'views/canvas',
   'boardconnection',
   'boardmessagehandler',
-  'toolbar'
+  'toolbar',
+  'src/app/utils'
 
 ], 
 
-function($, BoardView, BoardCanvas, BoardConnection, BoardMessageHandler, Toolbar){
+function($, BoardView, BoardCanvas, BoardConnection, BoardMessageHandler, Toolbar, Utils){
     var initialize = function(){
 
         var boardConnection, boardView, board_id, connectedUsers;// Added
+
+        board_id = Utils.getBoardId();
 
         boardView = new BoardView();
         boardView.render();
