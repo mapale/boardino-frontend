@@ -4,6 +4,10 @@ module.exports = function(grunt) {
   // Project configuration.
   grunt.initConfig({
 
+    clean : {
+      src: ['output']
+    },
+
     jasmine : {
       src : 'src/app/**/*.js',
       options : {
@@ -36,13 +40,44 @@ module.exports = function(grunt) {
       options: {
         jshintrc: '.jshintrc'
       }
+    },
+
+    watch: {
+      scripts: {
+        files: ['src/app/**/*.js'],
+        tasks: ['jshint'],
+        options: {
+          spawn: false,
+        },
+      }
+    },
+
+    concat: {
+      foo: {
+        files: [ 
+          {src: ['src/config.js','src/app.js'], dest: 'output/application.js'}
+        ]
+      }
+    },
+
+    uglify: {
+      dist: {
+        src: "output/application.js",
+        dest: "output/application.min.js"
+      }
     }
+
   });
   grunt.loadNpmTasks('grunt-contrib-jasmine');
   grunt.loadNpmTasks('grunt-contrib-jshint');
+  grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.loadNpmTasks('grunt-contrib-clean');
+  grunt.loadNpmTasks('grunt-contrib-uglify');
+  grunt.loadNpmTasks('grunt-contrib-concat');
 
   grunt.registerTask('test', ['jshint', 'jasmine']);
 
   grunt.registerTask('default', ['test']);
+  //grunt.registerTask('default', ['clean','concat','uglify']);
 
 };
