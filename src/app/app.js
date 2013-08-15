@@ -1,11 +1,11 @@
 /* globals $:false, define:false, document:false, window:false */
 define("app",[
   'jquery',
-  'views/board',
-  'views/canvas',
+  'src/app/views/board',
+  'src/app/views/canvas',
   'src/app/boardconnection',
-  'boardmessagehandler',
-  'toolbar',
+  'src/app/boardmessagehandler',
+  'src/app/toolbar',
   'src/app/utils'
 
 ], 
