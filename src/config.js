@@ -9,7 +9,8 @@ requirejs.config({
     ],
     backbone: "assets/vendor/backbone-min",
     underscore: "assets/vendor/underscore-min",
-    json2: "assets/vendor/json2"
+    json2: "assets/vendor/json2",
+    paper: "assets/vendor/paper"
   },
   shim: {
     underscore: {
@@ -18,6 +19,9 @@ requirejs.config({
     backbone: {
       deps: ["jquery", "underscore", "json2"],
       exports: "Backbone"
+    },
+    paper : {
+        exports: "paper"
     }
   } 
 });

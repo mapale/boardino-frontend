@@ -13,7 +13,8 @@ define([
             "keyup .postit_input": "updateText"
         },
 
-        initialize: function(){
+        initialize: function(attrs){
+            this.boardConnection = attrs.boardConnection;
             this.model.bind('change', this.render, this);
             this.model.bind('destroy', this.remove, this);
             this.model.bind('remove', this.remove, this);
@@ -34,7 +35,7 @@ define([
                         containment: "parent",
                         drag: function(){
                             var position = $(this).position();
-                            boardConnection.movePostit(_this.model.get("id"), position.left, position.top);
+                            _this.boardConnection.movePostit(_this.model.get("id"), position.left, position.top);
                         },
                         stop: function(){
                             var position = $(this).position();
@@ -45,7 +46,7 @@ define([
                         resize: function(){
                             var width = $(this).width();
                             var height = $(this).height();
-                            boardConnection.resizePostit(_this.model.get("id"), width, height);
+                            _this.boardConnection.resizePostit(_this.model.get("id"), width, height);
                         },
                         stop: function(event, ui){
                             var width = ui.size.width;
@@ -86,7 +87,7 @@ define([
 
         deletePostit: function(){
             this.model.destroy();
-            boardConnection.deletePostit(this.model.get("id"));
+            this.boardConnection.deletePostit(this.model.get("id"));
         },
 
         createPostitTextArea: function(){
@@ -99,7 +100,7 @@ define([
         updateText: function(){
             var text = this.input.val();
             this.model.save({text: text},{'silent':true});
-            boardConnection.updatePostitText(this.model.get("id"), text);
+            this.boardConnection.updatePostitText(this.model.get("id"), text);
         },
 
         createPostitColorTool: function(){
@@ -133,7 +134,7 @@ define([
                     .css('float', position)
                     .click(function() {
                         _this.model.save({"back_color": color});
-                        boardConnection.changePostitColor(_this.model.get("id"), color, color);
+                        _this.boardConnection.changePostitColor(_this.model.get("id"), color, color);
                     });
         },
 

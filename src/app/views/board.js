@@ -15,16 +15,18 @@ define([
             "mouseup": "mouseUp"
         },
 
-        initialize: function(){
+        initialize: function(attrs){
+            this.boardConnection = attrs.boardConnection;
+
             this.tool = "postits";
-            this.canvas = new BoardCanvas(),
+            this.canvas = new BoardCanvas({boardConnection: this.boardConnection});
             this.canvas.render();
 
-            var postits = new PostitList();
-            postits.bind('add', this.addOne, this);
-            postits.bind('reset', this.addAll, this);
-            postits.bind('all', this.render, this);
-            postits.fetch();
+            this.postits = new PostitList();
+            this.postits.bind('add', this.addOne, this);
+            this.postits.bind('reset', this.addAll, this);
+            this.postits.bind('all', this.render, this);
+            this.postits.fetch();
         },
 
         mousedown: function(e){
@@ -39,10 +41,11 @@ define([
             }
             if (this.tool === "postits") {
                 var postit = new Postit({"x":e.pageX, "y":e.pageY, "width":120, "height":120, "text":""});
-                postits.add(postit);//TODO: check what is this doing
+                this.postits.add(postit);//TODO: check what is this doing
+                var _this = this;
                 postit.save(null, {
                     success: function(model, response){
-                        boardConnection.newPostit(model.get("id"), postit.get("x"), postit.get("y"), postit.get("width"), postit.get("height"), postit.get("text"));
+                        _this.boardConnection.newPostit(model.get("id"), postit.get("x"), postit.get("y"), postit.get("width"), postit.get("height"), postit.get("text"));
                     }
                 });
                 postit.trigger('focus');
@@ -65,36 +68,36 @@ define([
         showPostit: function(id){
             var postit = new Postit({id:id});
             postit.fetch();
-            postits.add(postit);
+            this.postits.add(postit);
         },
 
         addAll: function() {
-            postits.each(this.addOne);
+            this.postits.each(this.addOne);
         },
 
         addOne: function(postit){
-            var view = new PostitView({model: postit});
+            var view = new PostitView({model: postit, boardConnection: this.boardConnection});
             $("#board").append(view.render().el);
         },
 
         movePostit: function(id, newX, newY){
-            postits.get(id).set({x: newX, y: newY});
+            this.postits.get(id).set({x: newX, y: newY});
         },
 
         resizePostit: function(id, width, height){
-            postits.get(id).set({width: width, height: height});
+            this.postits.get(id).set({width: width, height: height});
         },
 
         changePostitColor: function(id, color){
-            postits.get(id).set("back_color", color);
+            this.postits.get(id).set("back_color", color);
         },
 
         deletePostit: function(id){
-            postits.remove(id);
+            this.postits.remove(id);
         },
 
         updatePostitText: function(id, text){
-            postits.get(id).set("text",text);
+            this.postits.get(id).set("text",text);
         },
 
         startPath: function(id, x, y, color){

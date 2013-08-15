@@ -1,8 +1,10 @@
 define([
-    'backbone'
-], function(Backbone){
+    'backbone',
+    'src/app/utils'
+], function(Backbone, Utils){
+    var boardId = Utils.getBoardId();
     var Postit = Backbone.Model.extend({
-        urlRoot: "api/boards/"+board_id+"/postits/",
+        urlRoot: "api/boards/"+boardId+"/postits/",
 
         initialize: function(){
         }

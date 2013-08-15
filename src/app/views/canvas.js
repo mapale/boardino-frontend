@@ -2,9 +2,10 @@ define([
     'jquery',
     'backbone',
     'underscore',
+    'paper',
     'models/line',
     'collections/lines'
-], function($, Backbone, _, Line, LineList){
+], function($, Backbone, _, paper, Line, LineList){
     var BoardCanvas = Backbone.View.extend({
         el: $("#board-canvas"),
 
@@ -13,7 +14,8 @@ define([
         events: {
         },
 
-        initialize: function(){
+        initialize: function(attrs){
+            this.boardConnection = attrs.boardConnection;
             this.strokeColor = "black";
             var _this = this;
             this.lines.fetch({success: function(lineList){
@@ -51,7 +53,7 @@ define([
                               _this.line = model;
                               _this.line.path = path;
                               _this.lines.add(model);
-                              boardConnection.startPath(model.get("id"), x, y, model.get("color_l"));
+                              _this.boardConnection.startPath(model.get("id"), x, y, model.get("color_l"));
                               paper.view.draw();
                           }
                       });
@@ -62,7 +64,7 @@ define([
             setTimeout(function() {
                 if(_this.line && e.which === 1 && _this.line.type  ===  "free"){
                     _this.line.path.add(new paper.Point(e.pageX, e.pageY));
-                    boardConnection.addPathPoint(_this.line.get("id"), e.pageX, e.pageY);
+                    _this.boardConnection.addPathPoint(_this.line.get("id"), e.pageX, e.pageY);
                 }
                 paper.view.draw();
             }, 0);
@@ -71,13 +73,13 @@ define([
         finishLine: function(e){
             if(this.line.type === "rect"){
                 this.line.path.add(new paper.Point(e.pageX, e.pageY));
-                boardConnection.addPathPoint(this.line.get("id"), e.pageX, e.pageY);
+                this.boardConnection.addPathPoint(this.line.get("id"), e.pageX, e.pageY);
             }
             else{
                 this.line.path.simplify(10);
             }
             paper.view.draw();
-            boardConnection.finishPath(this.line.get("id"));
+            this.boardConnection.finishPath(this.line.get("id"));
             this.line.save({path: this.serialize(this.line.path)});
             this.line = null;
         },
@@ -138,7 +140,7 @@ define([
                     model.path.remove();
                 }
                 model.destroy();
-                boardConnection.deleteLine(model.get("id"));
+                this.boardConnection.deleteLine(model.get("id"));
             });
             paper.view.draw();
         },
@@ -153,7 +155,7 @@ define([
             var hitResult = paper.project.hitTest(new paper.Point(x,y), hitOptions);
             if(hitResult){
                 hitResult.item.remove();
-                boardConnection.deleteLine(hitResult.item.model.get("id"));
+                this.boardConnection.deleteLine(hitResult.item.model.get("id"));
                 hitResult.item.model.destroy();
                 paper.view.draw();
             }
