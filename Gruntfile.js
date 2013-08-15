@@ -20,7 +20,9 @@ module.exports = function(grunt) {
             baseUrl: '',
             paths: {
                 "jquery": "src/assets/vendor/jquery",
-                "backbone": "src/assets/vendor/backbone-min"
+                "backbone": "src/assets/vendor/backbone-min",
+                "underscore": "src/assets/vendor/underscore-min",
+                "paper": "src/assets/vendor/paper"
             },
             deps: ['jquery'],
             callback: function($) {
