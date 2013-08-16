@@ -1,13 +1,17 @@
 /* globals define:false, jasmine:false, io:false */
 define([
-    'src/app/boardconnection'
-], function(BoardConnection) {
+    'src/app/boardconnection',
+    'views/board'
+],
+
+function(BoardConnection, BoardView) {
     describe("Board Connection", function(){
 
         it("should nothing", function(){
 
         });
-        /*var fakeWs = {};
+        /*
+        var fakeWs = {};
         var boardConnection;
 
         beforeEach(function () {
