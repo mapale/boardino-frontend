@@ -1,5 +1,5 @@
 /*globals define:false*/
-define([
+define('views/board',[
     'jquery',
     'backbone',
     'src/app/views/postit',

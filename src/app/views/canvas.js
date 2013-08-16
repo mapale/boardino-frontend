@@ -1,19 +1,18 @@
 /*globals define:false*/
-define([
+define('canvas',[
     'jquery',
     'backbone',
     'underscore',
     'paper',
     'src/app/models/line',
     'src/app/collections/lines'
-], function($, Backbone, _, paper, Line, LineList){
+], 
+
+function($, Backbone, _, paper, Line, LineList){
     var BoardCanvas = Backbone.View.extend({
         el: $("#board-canvas"),
 
         lines : new LineList(),
-
-        events: {
-        },
 
         initialize: function(attrs){
             this.boardConnection = attrs.boardConnection;
@@ -33,7 +32,7 @@ define([
         },
 
         render: function(){
-            paper.view.draw();
+            paper.paper.draw();
         },
 
         startLine: function(x, y, type){

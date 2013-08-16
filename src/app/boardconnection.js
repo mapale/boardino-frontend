@@ -1,9 +1,10 @@
 /* globals define:false, io:false, window:false, $:false */
 define("src/app/boardconnection",[
-    'jquery'
+    'jquery',
+    'io'
 ],
 
-function($) {
+function($,io) {
 
     'use strict';
 
