@@ -22,7 +22,8 @@ module.exports = function(grunt) {
                 "jquery": "src/assets/vendor/jquery",
                 "backbone": "src/assets/vendor/backbone-min",
                 "underscore": "src/assets/vendor/underscore-min",
-                "paper": "src/assets/vendor/paper"
+                "paper": "src/assets/vendor/paper",
+                "io": "src/assets/vendor/socket.io.min",
             },
             deps: ['jquery'],
             callback: function($) {
@@ -57,7 +58,7 @@ module.exports = function(grunt) {
     concat: {
       foo: {
         files: [ 
-          {src: ['src/config.js','src/app.js'], dest: 'output/application.js'}
+          {src: ['src/config.js','src/app/**/*.js'], dest: 'output/application.js'}
         ]
       }
     },
@@ -80,6 +81,9 @@ module.exports = function(grunt) {
   grunt.registerTask('test', ['jshint', 'jasmine']);
 
   grunt.registerTask('default', ['test']);
-  //grunt.registerTask('default', ['clean','concat','uglify']);
+  
+  grunt.registerTask('build', ['clean','concat']);
+
+  grunt.registerTask('deploy', ['clean','concat','uglify']);
 
 };
