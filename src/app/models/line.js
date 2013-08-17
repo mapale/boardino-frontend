@@ -1,8 +1,10 @@
 /*globals define:false*/
-define([
+define('src/app/models/line',[
     'backbone',
     'src/app/utils'
-], function(Backbone, Utils){
+],
+
+function(Backbone, Utils){
     var boardId = Utils.getBoardId();
     var Line = Backbone.Model.extend({
         urlRoot: "api/boards/"+boardId+"/lines/",
@@ -13,4 +15,3 @@ define([
     });
     return Line;
 });
-

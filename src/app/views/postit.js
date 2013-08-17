@@ -1,8 +1,11 @@
 /*globals define:false*/
-define([
+define('src/app/views/postit',[
     'jquery',
     'backbone'
-], function($, Backbone){
+
+], 
+
+function($, Backbone){
     var PostitView = Backbone.View.extend({
         tagName: "div",
 

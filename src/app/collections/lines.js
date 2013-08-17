@@ -1,9 +1,12 @@
 /*globals define:false*/
-define([
+define('src/app/collections/lines.js',[
   'backbone',
   'src/app/models/line',
   'src/app/utils'
-], function(Backbone, Line, Utils){
+
+],
+
+function(Backbone, Line, Utils){
     var boardId = Utils.getBoardId();
     var LineList = Backbone.Collection.extend({
         model: Line,
