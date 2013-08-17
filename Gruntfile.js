@@ -1,6 +1,7 @@
+var config = require('./config');
 module.exports = function(grunt) {
   'use strict';
-
+  var path = config.django_path;
   // Project configuration.
   grunt.initConfig({
 
@@ -68,6 +69,14 @@ module.exports = function(grunt) {
         src: "output/application.js",
         dest: "output/application.min.js"
       }
+    },
+
+    copy: {
+      main: {
+        src: "output/*",
+        dest: path + 'application.js',
+        filter: 'isFile'
+      }
     }
 
   });
@@ -77,12 +86,13 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-concat');
+  grunt.loadNpmTasks('grunt-contrib-copy');
 
   grunt.registerTask('test', ['jshint', 'jasmine']);
 
   grunt.registerTask('default', ['test']);
   
-  grunt.registerTask('build', ['clean','concat']);
+  grunt.registerTask('build', ['clean','concat','copy:main']);
 
   grunt.registerTask('deploy', ['clean','concat','uglify']);
 
