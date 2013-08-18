@@ -64,6 +64,22 @@ module.exports = function(grunt) {
       }
     },
 
+    requirejs: {
+        compile: {
+            options: {
+                baseUrl: "src/",
+                mainConfigFile: "src/config.js",
+                /*paths: {
+                    jquery: 'src/assets/vendor/jquery'
+                },*/
+                name: 'app/app',
+                //include: ['app/app'],
+                out: "output/application.js",
+                optimize: 'none'
+            }
+        }
+    },
+
     uglify: {
       dist: {
         src: "output/application.js",
@@ -85,15 +101,15 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-uglify');
-  grunt.loadNpmTasks('grunt-contrib-concat');
+  grunt.loadNpmTasks('grunt-contrib-requirejs');
   grunt.loadNpmTasks('grunt-contrib-copy');
 
   grunt.registerTask('test', ['jshint', 'jasmine']);
 
   grunt.registerTask('default', ['test']);
   
-  grunt.registerTask('build', ['clean','concat','copy:main']);
+  grunt.registerTask('build', ['clean','requirejs','copy:main']);
 
-  grunt.registerTask('deploy', ['clean','concat','uglify']);
+  grunt.registerTask('deploy', ['clean','requirejs','uglify']);
 
 };

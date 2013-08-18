@@ -1,5 +1,5 @@
 /* globals $:false, define:false, document:false, window:false */
-define("app",[
+define("src/app",[
   'jquery',
   'src/app/views/board',
   'src/app/views/canvas',

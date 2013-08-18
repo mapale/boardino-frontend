@@ -1,5 +1,5 @@
 /*globals define:false*/
-define('src/app/collections/lines.js',[
+define('src/app/collections/lines',[
   'backbone',
   'src/app/models/line',
   'src/app/utils'

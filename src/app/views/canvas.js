@@ -1,5 +1,5 @@
 /*globals define:false*/
-define('canvas',[
+define('src/app/views/canvas',[
     'jquery',
     'backbone',
     'underscore',

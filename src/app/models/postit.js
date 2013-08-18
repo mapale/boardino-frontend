@@ -1,5 +1,5 @@
 /*globals define:false*/
-define([
+define('src/app/models/postit',[
     'backbone',
     'src/app/utils'
 ], function(Backbone, Utils){

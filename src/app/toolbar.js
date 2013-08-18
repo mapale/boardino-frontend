@@ -1,5 +1,5 @@
 /* globals define:false, jQuery:false */
-define('toolbar',[
+define('src/app/toolbar',[
     'jquery'
 ],
 
