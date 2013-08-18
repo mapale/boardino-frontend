@@ -36,6 +36,7 @@ define([
   ],
 
   function($, Backbone, App) {
+    App.initialize();
     console.log("jQuery version: ", $.fn.jquery);
     $(function(){
        console.log("Backbone: ", Backbone.VERSION);
