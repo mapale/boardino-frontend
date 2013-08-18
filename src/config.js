@@ -2,13 +2,13 @@
 requirejs.config({
   baseUrl: "",
   paths: {
-    vendor: "assets/vendor",
-    jquery: "src/assets/vendor/jquery",
-    backbone: "src/assets/vendor/backbone-min",
-    underscore: "src/assets/vendor/underscore-min",
-    json2: "src/assets/vendor/json2",
-    paper: "src/assets/vendor/paper",
-    io: "src/assets/vendor/socket.io.min"
+    vendor: "static/assets/vendor",
+    jquery: "static/assets/vendor/jquery",
+    backbone: "static/assets/vendor/backbone-min",
+    underscore: "static/assets/vendor/underscore-min",
+    json2: "static/assets/vendor/json2",
+    paper: "static/assets/vendor/paper",
+    io: "static/assets/vendor/socket.io.min"
   },
   shim: {
     underscore: {

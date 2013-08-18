@@ -20,11 +20,11 @@ module.exports = function(grunt) {
           requireConfig: {
             baseUrl: '',
             paths: {
-                "jquery": "src/assets/vendor/jquery",
-                "backbone": "src/assets/vendor/backbone-min",
-                "underscore": "src/assets/vendor/underscore-min",
-                "paper": "src/assets/vendor/paper",
-                "io": "src/assets/vendor/socket.io.min",
+                "jquery": "static/assets/vendor/jquery",
+                "backbone": "static/assets/vendor/backbone-min",
+                "underscore": "static/assets/vendor/underscore-min",
+                "paper": "static/assets/vendor/paper",
+                "io": "static/assets/vendor/socket.io.min",
             },
             deps: ['jquery'],
             callback: function($) {
