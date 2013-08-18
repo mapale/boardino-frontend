@@ -90,7 +90,7 @@ module.exports = function(grunt) {
     copy: {
       main: {
         src: "output/*",
-        dest: path + 'application.js',
+        dest: '../boardino/static/js/application.js',
         filter: 'isFile'
       }
     }
@@ -101,6 +101,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-uglify');
+  grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-requirejs');
   grunt.loadNpmTasks('grunt-contrib-copy');
 
@@ -108,8 +109,8 @@ module.exports = function(grunt) {
 
   grunt.registerTask('default', ['test']);
   
-  grunt.registerTask('build', ['clean','requirejs','copy:main']);
+  grunt.registerTask('build', ['clean','concat','copy:main']);
 
-  grunt.registerTask('deploy', ['clean','requirejs','uglify']);
+  grunt.registerTask('deploy', ['clean','concat','uglify']);
 
 };
