@@ -1,7 +1,7 @@
 /* globals define:false, jasmine:false, io:false */
 define([
     'src/app/boardconnection',
-    'views/board'
+    'src/app/views/board'
 ],
 
 function(BoardConnection, BoardView) {
