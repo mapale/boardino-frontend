@@ -32,7 +32,7 @@ function($, Backbone, _, paper, Line, LineList){
         },
 
         render: function(){
-            paper.paper.draw();
+            paper.view.draw();
         },
 
         startLine: function(x, y, type){

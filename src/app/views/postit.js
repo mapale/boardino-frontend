@@ -1,8 +1,7 @@
 /*globals define:false*/
 define('src/app/views/postit',[
-    'jquery',
+    'jquery-ui',
     'backbone'
-
 ], 
 
 function($, Backbone){
