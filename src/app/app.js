@@ -17,8 +17,10 @@ function($, BoardView, BoardCanvas, BoardConnection, BoardMessageHandler, Toolba
 
         function initBoard(){
             var board_id = Utils.getBoardId();
-            boardConnection = new BoardConnection(board_id, new BoardMessageHandler());
+            var boardMessageHandler = new BoardMessageHandler();
+            boardConnection = new BoardConnection(board_id, boardMessageHandler);
             boardView = new BoardView({boardConnection: boardConnection});
+            boardMessageHandler.setBoardView(boardView);
             boardView.render();
         }
 
