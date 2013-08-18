@@ -13,15 +13,13 @@ define("src/app",[
 function($, BoardView, BoardCanvas, BoardConnection, BoardMessageHandler, Toolbar, Utils){
     var initialize = function(){
 
-        var boardConnection, boardView, board_id, connectedUsers;// Added
-
-        board_id = Utils.getBoardId();
-
-        boardView = new BoardView({boardConnection: boardConnection});
-        boardView.render();
+        var boardConnection, boardView, connectedUsers;// Added
 
         function initBoard(){
-            boardConnection = new BoardConnection(board_id, new BoardMessageHandler(boardView));
+            var board_id = Utils.getBoardId();
+            boardConnection = new BoardConnection(board_id, new BoardMessageHandler());
+            boardView = new BoardView({boardConnection: boardConnection});
+            boardView.render();
         }
 
         $(document).ready(function() {

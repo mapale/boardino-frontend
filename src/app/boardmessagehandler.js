@@ -5,41 +5,43 @@ define("src/app/boardmessagehandler",[
 
 function($) {
 
-    var BoardMessageHandler = function(boardView){
+    var BoardMessageHandler = function(){
         var connectedUsers;
+        this.boardView = null;
+        var _this = this;
         this.handlers = {
             "startPath": function(args){
-                boardView.startPath(args["id"], args["x"], args["y"], args["color"]);
+                _this.boardView.startPath(args["id"], args["x"], args["y"], args["color"]);
             },
             "addPathPoint": function(args){
-                boardView.addPathPoint(args["id"], args["x"], args["y"]);
+                _this.boardView.addPathPoint(args["id"], args["x"], args["y"]);
             },
             "finishPath": function(args){
-                boardView.finishPath(args["id"]);
+                _this.boardView.finishPath(args["id"]);
             },
             "new" : function(args){
                 if(args["obj"]==="postit") {
-                    boardView.showPostit(args["id"]);
+                    _this.boardView.showPostit(args["id"]);
                 }
             },
             "update" : function(args){
-                boardView.updatePostitText(args["id"], args["text"]);
+                _this.boardView.updatePostitText(args["id"], args["text"]);
             },
             "move" : function(args){
-                boardView.movePostit(args["id"], args["x"], args["y"]);
+                _this.boardView.movePostit(args["id"], args["x"], args["y"]);
             },
             "resize" : function(args){
-                boardView.resizePostit(args["id"], args["w"], args["h"]);
+                _this.boardView.resizePostit(args["id"], args["w"], args["h"]);
             },
             "delete" : function(args){
                 if(args["obj"]==="postit") {
-                    boardView.deletePostit(args["id"]);
+                    _this.boardView.deletePostit(args["id"]);
                 } else {
-                    boardView.deleteLine(args["id"]);
+                    _this.boardView.deleteLine(args["id"]);
                 }
             },
             "change_color" : function(args){
-                boardView.changePostitColor(args["id"], args["back_color"]);
+                _this.boardView.changePostitColor(args["id"], args["back_color"]);
             },
             "info" : function(args){
                 connectedUsers = args.users+1;
@@ -68,6 +70,10 @@ function($) {
         if(this.handlers[messageType]) {
             this.handlers[messageType](message["args"]);
         }
+    };
+
+    BoardMessageHandler.prototype.setBoardView = function(boardView){
+        this.boardView = boardView;
     };
 
     return BoardMessageHandler;

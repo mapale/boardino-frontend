@@ -4,6 +4,7 @@ requirejs.config({
   paths: {
     vendor: "static/assets/vendor",
     jquery: "static/assets/vendor/jquery",
+    "jquery-ui": "static/assets/vendor/jquery-ui.min",
     backbone: "static/assets/vendor/backbone-min",
     underscore: "static/assets/vendor/underscore-min",
     json2: "static/assets/vendor/json2",
@@ -11,6 +12,10 @@ requirejs.config({
     io: "static/assets/vendor/socket.io.min"
   },
   shim: {
+    "jquery-ui": {
+      exports: "$",
+      deps: ['jquery']
+    },
     underscore: {
       exports: "_"
     },

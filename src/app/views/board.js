@@ -73,11 +73,14 @@ define('src/app/views/board',[
         },
 
         addAll: function() {
-            this.postits.each(this.addOne);
+            var _this = this;
+            this.postits.each(function(postit){
+                _this.addOne(postit, _this.boardConnection);
+            });
         },
 
-        addOne: function(postit){
-            var view = new PostitView({model: postit, boardConnection: this.boardConnection});
+        addOne: function(postit, boardConnection){
+            var view = new PostitView({model: postit, boardConnection: boardConnection});
             $("#board").append(view.render().el);
         },
 
