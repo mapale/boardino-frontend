@@ -49,7 +49,7 @@ module.exports = function(grunt) {
     watch: {
       scripts: {
         files: ['src/app/**/*.js'],
-        tasks: ['jshint'],
+        tasks: ['build'],
         options: {
           spawn: false,
         },
@@ -83,7 +83,7 @@ module.exports = function(grunt) {
     uglify: {
       dist: {
         src: "output/application.js",
-        dest: "output/application.min.js"
+        dest: "release/application.min.js"
       }
     },
 
@@ -109,7 +109,7 @@ module.exports = function(grunt) {
 
   grunt.registerTask('default', ['test']);
   
-  grunt.registerTask('build', ['clean','concat','copy:main']);
+  grunt.registerTask('build', ['test','clean','concat','copy:main']);
 
   grunt.registerTask('deploy', ['clean','concat','uglify']);
 
