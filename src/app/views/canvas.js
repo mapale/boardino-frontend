@@ -135,12 +135,13 @@ function($, Backbone, _, paper, Line, LineList){
         },
 
         clearLines: function(color){
+            var _this = this;
             _.chain(this.lines.models).clone().each(function(model){
                 if (model.path) {
                     model.path.remove();
                 }
                 model.destroy();
-                this.boardConnection.deleteLine(model.get("id"));
+                _this.boardConnection.deleteLine(model.get("id"));
             });
             paper.view.draw();
         },
