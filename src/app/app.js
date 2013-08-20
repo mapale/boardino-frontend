@@ -13,7 +13,7 @@ define("app",[
 function($, BoardView, BoardCanvas, BoardConnection, BoardMessageHandler, Toolbar, Utils){
     var initialize = function(){
 
-        var boardConnection, boardView, connectedUsers;// Added
+        var boardConnection, boardView;// Added
 
         function initBoard(){
             var board_id = Utils.getBoardId();
@@ -28,12 +28,12 @@ function($, BoardView, BoardCanvas, BoardConnection, BoardMessageHandler, Toolba
             initBoard();
             loadToolbar();
 
-            $("#connected_users").mouseover(function(){
+            /*$("#connected_users").mouseover(function(){
                 $(this).text(connectedUsers + " connected users");
             });
             $("#connected_users").mouseout(function(){
                 $(this).text(connectedUsers);
-            });
+            });*/
 
             $(window).bind("beforeunload", function() {
                 boardConnection.disconnect();
