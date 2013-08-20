@@ -36,7 +36,7 @@ define([
 
   "jquery",
   "backbone",
-  "src/app"
+  "app"
 
   ],
 

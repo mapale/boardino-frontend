@@ -1,11 +1,11 @@
 /*globals define:false*/
-define('src/app/views/canvas',[
+define('app/views/canvas',[
     'jquery',
     'backbone',
     'underscore',
     'paper',
-    'src/app/models/line',
-    'src/app/collections/lines'
+    'app/models/line',
+    'app/collections/lines'
 ], 
 
 function($, Backbone, _, paper, Line, LineList){

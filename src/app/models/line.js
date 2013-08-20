@@ -1,7 +1,7 @@
 /*globals define:false*/
-define('src/app/models/line',[
+define('app/models/line',[
     'backbone',
-    'src/app/utils'
+    'app/utils'
 ],
 
 function(Backbone, Utils){

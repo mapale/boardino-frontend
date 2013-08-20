@@ -1,12 +1,12 @@
 /* globals $:false, define:false, document:false, window:false */
-define("src/app",[
+define("app",[
   'jquery',
-  'src/app/views/board',
-  'src/app/views/canvas',
-  'src/app/boardconnection',
-  'src/app/boardmessagehandler',
-  'src/app/toolbar',
-  'src/app/utils'
+  'app/views/board',
+  'app/views/canvas',
+  'app/boardconnection',
+  'app/boardmessagehandler',
+  'app/toolbar',
+  'app/utils'
 
 ], 
 

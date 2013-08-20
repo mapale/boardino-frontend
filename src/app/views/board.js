@@ -1,12 +1,15 @@
 /*globals define:false*/
-define('src/app/views/board',[
+define('app/views/board',[
     'jquery',
     'backbone',
-    'src/app/views/postit',
-    'src/app/views/canvas',
-    'src/app/models/postit',
-    'src/app/collections/postits'
-], function($, Backbone, PostitView, BoardCanvas, Postit, PostitList){
+    'app/views/postit',
+    'app/views/canvas',
+    'app/models/postit',
+    'app/collections/postits'
+
+], 
+
+function($, Backbone, PostitView, BoardCanvas, Postit, PostitList){
     var BoardView = Backbone.View.extend({
         el: $("#board"),
 

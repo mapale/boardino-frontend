@@ -1,8 +1,8 @@
 /*globals define:false*/
-define('src/app/collections/postits',[
+define('app/collections/postits',[
   'backbone',
-  'src/app/models/postit',
-  'src/app/utils'
+  'app/models/postit',
+  'app/utils'
 
 ],
 

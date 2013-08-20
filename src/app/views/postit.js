@@ -1,5 +1,5 @@
 /*globals define:false*/
-define('src/app/views/postit',[
+define('app/views/postit',[
     'jquery-ui',
     'backbone'
 ], 

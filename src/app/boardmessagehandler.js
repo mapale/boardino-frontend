@@ -1,5 +1,5 @@
 /* globals define:false, io:false, window:false, $:false */
-define("src/app/boardmessagehandler",[
+define("app/boardmessagehandler",[
     'jquery'
 ],
 

@@ -1,5 +1,5 @@
 /*globals define:false, window:false */
-define("src/app/utils",[
+define("app/utils",[
 
 ],
 

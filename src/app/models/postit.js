@@ -1,7 +1,7 @@
 /*globals define:false*/
-define('src/app/models/postit',[
+define('app/models/postit',[
     'backbone',
-    'src/app/utils'
+    'app/utils'
 ], function(Backbone, Utils){
     var boardId = Utils.getBoardId();
     var Postit = Backbone.Model.extend({
