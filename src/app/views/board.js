@@ -1,15 +1,15 @@
 /*globals define:false*/
 define('app/views/board',[
-    'jquery',
-    'backbone',
-    'app/views/postit',
-    'app/views/canvas',
-    'app/models/postit',
-    'app/collections/postits'
-
+  'jquery',
+  'backbone',
+  'app/views/postit',
+  'app/views/canvas',
+  'app/models/board',
+  'app/models/postit',
+  'app/collections/postits'
 ], 
 
-function($, Backbone, PostitView, BoardCanvas, Postit, PostitList){
+function($, Backbone, PostitView, BoardCanvas, Board, Postit, PostitList){
     var BoardView = Backbone.View.extend({
         el: $("#board"),
 
@@ -20,17 +20,21 @@ function($, Backbone, PostitView, BoardCanvas, Postit, PostitList){
         },
 
         initialize: function(attrs){
-            this.boardConnection = attrs.boardConnection;
+          this.boardConnection = attrs.boardConnection;
 
             this.tool = "postits";
             this.canvas = new BoardCanvas({boardConnection: this.boardConnection});
             this.canvas.render();
 
-            this.postits = new PostitList();
-            this.postits.bind('add', this.addOne, this);
-            this.postits.bind('reset', this.addAll, this);
-            this.postits.bind('all', this.render, this);
-            this.postits.fetch();
+          this.tool = "postits";
+          this.canvas = new BoardCanvas({boardConnection: this.boardConnection});
+          this.canvas.render();
+
+          this.postits = new PostitList();
+          this.postits.bind('add', this.addOne, this);
+          this.postits.bind('reset', this.addAll, this);
+          this.postits.bind('all', this.render, this);
+          this.postits.fetch();
         },
 
         mousedown: function(e){

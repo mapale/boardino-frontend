@@ -1,6 +1,7 @@
 /* globals $:false, define:false, document:false, window:false */
 define("app",[
   'jquery',
+  'app/views/main',
   'app/views/board',
   'app/views/canvas',
   'app/boardconnection',
@@ -11,20 +12,20 @@ define("app",[
   'bootstrap'
 ], 
 
-function($, BoardView, BoardCanvas, BoardConnection, BoardMessageHandler, Toolbar, Utils, Board){
+function($, MainView, BoardView, BoardCanvas, BoardConnection, BoardMessageHandler, Toolbar, Utils){
     var initialize = function(){
 
-        var boardConnection, boardView, board;// Added
+        var boardConnection, boardView;// Added
 
         function initBoard(){
-          var board_id = Utils.getBoardId();
-          board = new Board({id: board_id});
-          board.fetch();
+          var boardId = Utils.getBoardId();
           var boardMessageHandler = new BoardMessageHandler();
-            boardConnection = new BoardConnection(board_id, boardMessageHandler);
-            boardView = new BoardView({boardConnection: boardConnection});
-            boardMessageHandler.setBoardView(boardView);
-            boardView.render();
+          boardConnection = new BoardConnection(boardId, boardMessageHandler);
+          boardView = new BoardView({boardConnection: boardConnection});
+          boardMessageHandler.setBoardView(boardView);
+
+          var mainView = new MainView({boardView: boardView, boardId: boardId});
+          mainView.render();
         }
 
         $(document).ready(function() {
@@ -46,45 +47,6 @@ function($, BoardView, BoardCanvas, BoardConnection, BoardMessageHandler, Toolba
             $("#pencil_green_tool").hide();
             $("#pencil_red_tool").hide();
             $("#pencil_blue_tool").hide();
-          });
-
-          var menu = $("#menu");
-          menu.menu();
-
-          $("#menu_tool").mouseover(function(){
-            menu.show();
-          });
-
-          menu.mouseleave(function(){
-            menu.hide();
-          });
-
-          var setPasswordModal = $("#set-password-modal");
-          $("#set-password").click(function(e){
-            e.preventDefault();
-            setPasswordModal.modal();
-          });
-
-          var savePasswordBtn = $("#set-password-btn");
-          savePasswordBtn.click(function(e){
-            e.preventDefault();
-            $(this).button('loading');
-            var passwordInput = $("#board-password");
-            var passwordConfirmInput = $("#board-password2");
-            var password = passwordInput.val();
-            var passwordConfirmation = passwordConfirmInput.val();
-            if (password === passwordConfirmation) {
-              board.set("password", password);
-              board.save({}, {success: function(){
-                setPasswordModal.modal('hide');
-                savePasswordBtn.button('reset');
-                passwordInput.val("");
-                $("set-password-error").hide();
-              }});
-            } else {
-              $("#set-password-error").fadeIn();
-              savePasswordBtn.button('reset');
-            }
           });
 
           $(window).bind("beforeunload", function() {
