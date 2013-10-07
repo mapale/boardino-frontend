@@ -6,18 +6,21 @@ define("app",[
   'app/boardconnection',
   'app/boardmessagehandler',
   'app/toolbar',
-  'app/utils'
-
+  'app/utils',
+  'app/models/board',
+  'bootstrap'
 ], 
 
-function($, BoardView, BoardCanvas, BoardConnection, BoardMessageHandler, Toolbar, Utils){
+function($, BoardView, BoardCanvas, BoardConnection, BoardMessageHandler, Toolbar, Utils, Board){
     var initialize = function(){
 
-        var boardConnection, boardView;// Added
+        var boardConnection, boardView, board;// Added
 
         function initBoard(){
-            var board_id = Utils.getBoardId();
-            var boardMessageHandler = new BoardMessageHandler();
+          var board_id = Utils.getBoardId();
+          board = new Board({id: board_id});
+          board.fetch();
+          var boardMessageHandler = new BoardMessageHandler();
             boardConnection = new BoardConnection(board_id, boardMessageHandler);
             boardView = new BoardView({boardConnection: boardConnection});
             boardMessageHandler.setBoardView(boardView);
@@ -25,19 +28,68 @@ function($, BoardView, BoardCanvas, BoardConnection, BoardMessageHandler, Toolba
         }
 
         $(document).ready(function() {
-            initBoard();
-            loadToolbar();
+          initBoard();
+          loadToolbar();
+          var pencil_tool = $("#pencil_tool");
+          pencil_tool.mouseover(function(){
+            $("#pencil_tool").width(200);
+            $("#selected_pencil_tool").hide();
+            $("#pencil_black_tool").show();
+            $("#pencil_green_tool").show();
+            $("#pencil_red_tool").show();
+            $("#pencil_blue_tool").show();
+          });
+          pencil_tool.mouseout(function(){
+            $("#pencil_tool").width(50);
+            $("#selected_pencil_tool").show();
+            $("#pencil_black_tool").hide();
+            $("#pencil_green_tool").hide();
+            $("#pencil_red_tool").hide();
+            $("#pencil_blue_tool").hide();
+          });
 
-            /*$("#connected_users").mouseover(function(){
-                $(this).text(connectedUsers + " connected users");
-            });
-            $("#connected_users").mouseout(function(){
-                $(this).text(connectedUsers);
-            });*/
+          var menu = $("#menu");
+          menu.menu();
 
-            $(window).bind("beforeunload", function() {
-                boardConnection.disconnect();
-            });
+          $("#menu_tool").mouseover(function(){
+            menu.show();
+          });
+
+          menu.mouseleave(function(){
+            menu.hide();
+          });
+
+          var setPasswordModal = $("#set-password-modal");
+          $("#set-password").click(function(e){
+            e.preventDefault();
+            setPasswordModal.modal();
+          });
+
+          var savePasswordBtn = $("#set-password-btn");
+          savePasswordBtn.click(function(e){
+            e.preventDefault();
+            $(this).button('loading');
+            var passwordInput = $("#board-password");
+            var passwordConfirmInput = $("#board-password2");
+            var password = passwordInput.val();
+            var passwordConfirmation = passwordConfirmInput.val();
+            if (password === passwordConfirmation) {
+              board.set("password", password);
+              board.save({}, {success: function(){
+                setPasswordModal.modal('hide');
+                savePasswordBtn.button('reset');
+                passwordInput.val("");
+                $("set-password-error").hide();
+              }});
+            } else {
+              $("#set-password-error").fadeIn();
+              savePasswordBtn.button('reset');
+            }
+          });
+
+          $(window).bind("beforeunload", function() {
+            boardConnection.disconnect();
+          });
         });
 
         function loadToolbar(){
@@ -108,24 +160,6 @@ function($, BoardView, BoardCanvas, BoardConnection, BoardMessageHandler, Toolba
                         boardView.selectRectLineTool("FF000000");
                     }
             }));
-
-
-            $("#pencil_tool").mouseover(function(){
-                $("#pencil_tool").width(200);
-                $("#selected_pencil_tool").hide();
-                $("#pencil_black_tool").show();
-                $("#pencil_green_tool").show();
-                $("#pencil_red_tool").show();
-                $("#pencil_blue_tool").show();
-            });
-            $("#pencil_tool").mouseout(function(){
-                $("#pencil_tool").width(50);
-                $("#selected_pencil_tool").show();
-                $("#pencil_black_tool").hide();
-                $("#pencil_green_tool").hide();
-                $("#pencil_red_tool").hide();
-                $("#pencil_blue_tool").hide();
-            });
         }
   };
 

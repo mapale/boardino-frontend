@@ -1,7 +1,5 @@
-var config = require('./config');
 module.exports = function(grunt) {
   'use strict';
-  var path = config.django_path;
   // Project configuration.
   grunt.initConfig({
 
@@ -92,6 +90,10 @@ module.exports = function(grunt) {
         src: "output/*",
         dest: '../boardino/static/js/application.js',
         filter: 'isFile'
+      },
+      prod: {
+        src: "release/*",
+        dest: '../boardino/static/js/application.min.js'
       }
     }
 
@@ -111,6 +113,6 @@ module.exports = function(grunt) {
   
   grunt.registerTask('build', ['test','clean','concat','copy:main']);
 
-  grunt.registerTask('deploy', ['clean','concat','uglify']);
+  grunt.registerTask('deploy', ['clean','concat','uglify','copy:prod']);
 
 };

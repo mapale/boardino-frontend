@@ -5,6 +5,7 @@ requirejs.config({
     vendor: "static/assets/vendor",
     jquery: "static/assets/vendor/jquery",
     "jquery-ui": "static/assets/vendor/jquery-ui.min",
+    bootstrap: "static/assets/vendor/bootstrap.min",
     backbone: "static/assets/vendor/backbone-min",
     underscore: "static/assets/vendor/underscore-min",
     json2: "static/assets/vendor/json2",
@@ -13,6 +14,10 @@ requirejs.config({
   },
   shim: {
     "jquery-ui": {
+      exports: "$",
+      deps: ['jquery']
+    },
+    "bootstrap": {
       exports: "$",
       deps: ['jquery']
     },
