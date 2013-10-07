@@ -16,7 +16,7 @@ function($,io) {
             alert(data.message);
         });*/
 
-        this.ws = io.connect( 'http://' + window.location.hostname + ':8888' );
+        this.ws = io.connect( 'http://' + window['ws_host'] );
 
         var _this = this;
         this.ws.on('connect', function () {
