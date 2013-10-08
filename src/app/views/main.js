@@ -50,7 +50,7 @@ define('app/views/main',[
     },
     setBoardPassword: function(e) {
       e.preventDefault();
-      $("#set-password-btn").button().button('loading');
+      $("#set-password-btn").attr('disabled','disabled');
       var passwordInput = $("#board-password");
       var passwordConfirmInput = $("#board-password2");
       var password = passwordInput.val();
@@ -59,29 +59,29 @@ define('app/views/main',[
         this.board.set("password", password);
         this.board.save({}, {success: function(){
           $("#set-password-modal").modal('hide');
-          $("#set-password-btn").button('reset');
+          $("#set-password-btn").removeAttr("disabled");
           passwordInput.val("");
           $("set-password-error").hide();
         }});
       } else {
         $("#set-password-error").fadeIn();
-        $(this).button('reset');
+        $(this).removeAttr("disabled");
       }
     },
     setBoardAlias: function(e) {
       e.preventDefault();
-      $("#set-alias-btn").button().button('loading');
+      $("#set-alias-btn").attr("disabled", "disabled");
       var alias = $("#board-alias").val();
       if(/[^a-zA-Z0-9]/.test(alias)){
         $("#set-alias-error").fadeOut().fadeIn();
-        $("#set-alias-btn").button('reset');
+        $("#set-alias-btn").removeAttr("disabled");
       } else {
         this.board.set("hash", alias);
         this.board.save({},
           {
             success: function(){
               $("#set-alias-modal").modal('hide');
-              $("#set-alias-btn").button('reset');
+              $("#set-alias-btn").removeAttr("disabled");
               $("set-alias-error").hide();
               window.location.href = "/"+alias;
             },
@@ -92,7 +92,7 @@ define('app/views/main',[
               }else {
                 $("#set-alias-error-msg").html("There was an unknown error. Try again.");
               }
-              $("#set-alias-btn").button('reset');
+              $("#set-alias-btn").removeAttr("disabled");
               $("#set-alias-error").fadeOut().fadeIn();
             }
           }
