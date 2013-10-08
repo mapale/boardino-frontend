@@ -14,7 +14,9 @@ define('app/views/main',[
       "mouseover #menu_tool": "showMenu",
       "mouseleave #menu": "hideMenu",
       "click #set-password": "showSetPasswordModal",
-      "click #set-password-btn": "setBoardPassword"
+      "click #set-alias": "showSetAliasModal",
+      "click #set-password-btn": "setBoardPassword",
+      "click #set-alias-btn": "setBoardAlias"
     },
     initialize: function(attrs){
       this.boardView = attrs.boardView;
@@ -22,6 +24,8 @@ define('app/views/main',[
       this.board = new Board({id: boardId});
       this.menu = $("#menu");
       this.menu.menu();
+      $("#set-password-modal").modal({show:false});
+      $("#set-alias-modal").modal({show:false});
     },
     render: function() {
       var _this = this;
@@ -37,11 +41,16 @@ define('app/views/main',[
     },
     showSetPasswordModal: function(e) {
       e.preventDefault();
-      $("#set-password-modal").modal();
+      $("#set-password-modal").modal('show');
+    },
+    showSetAliasModal: function(e) {
+      e.preventDefault();
+      $("board-alias").val(this.board.get("hash"));
+      $("#set-alias-modal").modal('show');
     },
     setBoardPassword: function(e) {
       e.preventDefault();
-      $(this).button('loading');
+      $("#set-password-btn").button().button('loading');
       var passwordInput = $("#board-password");
       var passwordConfirmInput = $("#board-password2");
       var password = passwordInput.val();
@@ -57,6 +66,37 @@ define('app/views/main',[
       } else {
         $("#set-password-error").fadeIn();
         $(this).button('reset');
+      }
+    },
+    setBoardAlias: function(e) {
+      e.preventDefault();
+      $("#set-alias-btn").button().button('loading');
+      var alias = $("#board-alias").val();
+      if(/[^a-zA-Z0-9]/.test(alias)){
+        $("#set-alias-error").fadeOut().fadeIn();
+        $("#set-alias-btn").button('reset');
+      } else {
+        this.board.set("hash", alias);
+        this.board.save({},
+          {
+            success: function(){
+              $("#set-alias-modal").modal('hide');
+              $("#set-alias-btn").button('reset');
+              $("set-alias-error").hide();
+              window.location.href = "/"+alias;
+            },
+            error: function(model, response){
+              var responseObj = $.parseJSON(response.responseText);
+              if (responseObj["hash"]) {
+                $("#set-alias-error-msg").html(responseObj["hash"][0]);
+              }else {
+                $("#set-alias-error-msg").html("There was an unknown error. Try again.");
+              }
+              $("#set-alias-btn").button('reset');
+              $("#set-alias-error").fadeOut().fadeIn();
+            }
+          }
+        );
       }
     }
   });
