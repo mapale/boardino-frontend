@@ -118,7 +118,7 @@ function($, MainView, BoardView, BoardCanvas, BoardConnection, BoardMessageHandl
 
             toolbar.addTool($("#rectline_tool").tool(toolbar, {
                     "action": function(){
-                        $("#board").css('cursor','url(/static/images/rectline_disabled.ico),default');
+                        $("#board").css('cursor','crosshair');
                         boardView.selectRectLineTool("FF000000");
                     }
             }));
