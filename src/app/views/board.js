@@ -22,10 +22,6 @@ function($, Backbone, PostitView, BoardCanvas, Board, Postit, PostitList){
         initialize: function(attrs){
           this.boardConnection = attrs.boardConnection;
 
-            this.tool = "postits";
-            this.canvas = new BoardCanvas({boardConnection: this.boardConnection});
-            this.canvas.render();
-
           this.tool = "postits";
           this.canvas = new BoardCanvas({boardConnection: this.boardConnection});
           this.canvas.render();
