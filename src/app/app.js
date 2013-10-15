@@ -122,6 +122,13 @@ function($, MainView, BoardView, BoardCanvas, BoardConnection, BoardMessageHandl
                         boardView.selectRectLineTool("FF000000");
                     }
             }));
+
+          toolbar.addTool($("#text_tool").tool(toolbar, {
+            "action": function(){
+              $("#board").css('cursor','arrow');
+              boardView.selectTextTool();
+            }
+          }));
         }
   };
 

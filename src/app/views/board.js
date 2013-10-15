@@ -4,12 +4,15 @@ define('app/views/board',[
   'backbone',
   'app/views/postit',
   'app/views/canvas',
+  'app/views/text',
   'app/models/board',
   'app/models/postit',
-  'app/collections/postits'
+  'app/models/text',
+  'app/collections/postits',
+  'app/collections/texts'
 ], 
 
-function($, Backbone, PostitView, BoardCanvas, Board, Postit, PostitList){
+function($, Backbone, PostitView, BoardCanvas, TextView, Board, Postit, Text, PostitList, TextList){
     var BoardView = Backbone.View.extend({
         el: $("#board"),
 
@@ -31,6 +34,12 @@ function($, Backbone, PostitView, BoardCanvas, Board, Postit, PostitList){
           this.postits.bind('reset', this.addAll, this);
           this.postits.bind('all', this.render, this);
           this.postits.fetch();
+
+          this.texts = new TextList();
+          this.texts.bind('add', this.addOneText, this);
+          this.texts.bind('reset', this.addAllTexts, this);
+          this.texts.bind('all', this.render, this);
+          this.texts.fetch();
         },
 
         mousedown: function(e){
@@ -43,16 +52,33 @@ function($, Backbone, PostitView, BoardCanvas, Board, Postit, PostitList){
             if (this.tool === "eraser") {
                 this.canvas.tryToErase(e.pageX, e.pageY);
             }
+            var _this = this;
             if (this.tool === "postits") {
                 var postit = new Postit({"x":e.pageX, "y":e.pageY, "width":120, "height":120, "text":""});
                 this.postits.add(postit);//TODO: check what is this doing
-                var _this = this;
                 postit.save(null, {
                     success: function(model, response){
                         _this.boardConnection.newPostit(model.get("id"), postit.get("x"), postit.get("y"), postit.get("width"), postit.get("height"), postit.get("text"));
                     }
                 });
                 postit.trigger('focus');
+            }
+            if (this.tool === "text") {
+              var text = new Text({
+                text: "",
+                x: e.pageX,
+                y: e.pageY,
+                width: 150,
+                height: 50
+              });
+              var view = new TextView({model: text, boardConnection: this.boardConnection});
+              $("#board").append(view.render().el);
+
+              text.save(null, {
+                success: function(model, response){
+                  _this.boardConnection.newText(model.get("id"), text.get("x"), text.get("y"), text.get("width"), text.get("height"), text.get("text"));
+                }
+              });
             }
             return false;
         },
@@ -74,25 +100,41 @@ function($, Backbone, PostitView, BoardCanvas, Board, Postit, PostitList){
             postit.fetch();
             this.postits.add(postit);
         },
-
+        showText: function(id){
+          var _this = this;
+          var text = new Text({id:id});
+          text.fetch({
+            success: function(){
+              _this.texts.add(text);
+            }
+          });
+        },
         addAll: function() {
-            var _this = this;
             this.postits.each(this.addOne, this);
         },
-
+        addAllTexts: function() {
+            this.texts.each(this.addOneText, this);
+        },
         addOne: function(postit){
             var view = new PostitView({model: postit, boardConnection: this.boardConnection});
             $("#board").append(view.render().el);
         },
-
+        addOneText: function(text){
+          var view = new TextView({model: text, boardConnection: this.boardConnection});
+          $("#board").append(view.render().el);
+        },
         movePostit: function(id, newX, newY){
             this.postits.get(id).set({x: newX, y: newY});
         },
-
+        moveText: function(id, newX, newY){
+          this.texts.get(id).set({x: newX, y: newY});
+        },
         resizePostit: function(id, width, height){
             this.postits.get(id).set({width: width, height: height});
         },
-
+        resizeText: function(id, width, height){
+          this.texts.get(id).set({width: width, height: height});
+        },
         changePostitColor: function(id, color){
             this.postits.get(id).set("back_color", color);
         },
@@ -101,8 +143,16 @@ function($, Backbone, PostitView, BoardCanvas, Board, Postit, PostitList){
             this.postits.remove(id);
         },
 
+        deleteText: function(id){
+          this.texts.remove(id);
+        },
+
         updatePostitText: function(id, text){
             this.postits.get(id).set("text",text);
+        },
+
+        updateText: function(id, text){
+          this.texts.get(id).set("text", text);
         },
 
         startPath: function(id, x, y, color){
@@ -133,6 +183,10 @@ function($, Backbone, PostitView, BoardCanvas, Board, Postit, PostitList){
 
         selectEraserTool: function(){
             this.tool = "eraser";
+        },
+
+        selectTextTool: function(){
+            this.tool = "text";
         },
 
         clearLines: function(){

@@ -9,13 +9,6 @@ function($,io) {
     'use strict';
 
     function BoardConnection(board_id, boardMessageHandler) {
-        /*this.pusher = new Pusher('32b728d173f152c58554');
-        var channel = this.pusher.subscribe('test_channel');
-
-        channel.bind('my_event', function(data) {
-            alert(data.message);
-        });*/
-
         this.ws = io.connect( 'http://' + window['ws_host'] );
 
         var _this = this;
@@ -43,26 +36,55 @@ function($,io) {
 
     BoardConnection.prototype.movePostit = function(id, x, y){
         this.send("move",{
+                "obj": "postit",
                 "id": id,
                 "x": x,
                 "y": y
         });
     };
 
+    BoardConnection.prototype.moveText = function(id, x, y){
+      this.send("move",{
+        "obj": "text",
+        "id": id,
+        "x": x,
+        "y": y
+      });
+    };
+
     BoardConnection.prototype.resizePostit = function(postItId, width, height){
         this.send("resize", {
+                "obj": "postit",
                 "id":postItId,
                 "w": width,
                 "h": height
             });
     };
 
+    BoardConnection.prototype.resizeText = function(textId, width, height){
+      this.send("resize", {
+        "obj": "text",
+        "id": textId,
+        "w": width,
+        "h": height
+      });
+    };
+
     BoardConnection.prototype.updatePostitText = function(postItId, text){
         this.send("update", {
+                "obj": "postit",
                 "id":postItId,
                 "text": text
             });
     };
+
+    BoardConnection.prototype.updateText = function(textId, text){
+      this.send("update", {
+        "obj": "text",
+        "id": textId,
+        "text": text
+      });
+  };
 
     BoardConnection.prototype.changePostitColor = function(postItId, color, backColor){
         this.send("change_color", {
@@ -89,11 +111,30 @@ function($,io) {
             });
     };
 
+    BoardConnection.prototype.newText = function(textId, x, y, width, height, text){
+      this.send("new",{
+        "obj":"text",
+        "id":textId,
+        "x": x,
+        "y": y,
+        "w": width,
+        "h": height,
+        "text":text
+      });
+    };
+
     BoardConnection.prototype.deletePostit = function(postitId){
         this.send("delete",{
                 "obj": "postit",
                 "id":postitId
             });
+    };
+
+    BoardConnection.prototype.deleteText = function(textId){
+      this.send("delete",{
+        "obj": "text",
+        "id": textId
+      });
     };
 
     BoardConnection.prototype.deleteLine = function(id){
