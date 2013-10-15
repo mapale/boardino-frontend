@@ -21,23 +21,39 @@ function($) {
             },
             "new" : function(args){
                 if(args["obj"]==="postit") {
-                    _this.boardView.showPostit(args["id"]);
+                  _this.boardView.showPostit(args["id"]);
+                } else if(args["obj"]==="text"){
+                  _this.boardView.showText(args["id"]);
                 }
             },
             "update" : function(args){
+              if(args["obj"]==="postit") {
                 _this.boardView.updatePostitText(args["id"], args["text"]);
+              } else if(args["obj"]==="text"){
+                _this.boardView.updateText(args["id"], args["text"]);
+              }
             },
             "move" : function(args){
+              if(args["obj"]==="postit") {
                 _this.boardView.movePostit(args["id"], args["x"], args["y"]);
+              } else if(args["obj"]==="text") {
+                _this.boardView.moveText(args["id"], args["x"], args["y"]);
+              }
             },
             "resize" : function(args){
+              if(args["obj"]==="postit") {
                 _this.boardView.resizePostit(args["id"], args["w"], args["h"]);
+              } else if(args["obj"]==="text") {
+                _this.boardView.resizeText(args["id"], args["w"], args["h"]);
+              }
             },
             "delete" : function(args){
                 if(args["obj"]==="postit") {
                     _this.boardView.deletePostit(args["id"]);
-                } else {
+                } else if(args["obj"]==="line") {
                     _this.boardView.deleteLine(args["id"]);
+                } else if(args["obj"]==="text") {
+                  _this.boardView.deleteText(args["id"]);
                 }
             },
             "change_color" : function(args){
