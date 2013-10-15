@@ -36,52 +36,63 @@ function($, Backbone, _, paper, Line, LineList){
         },
 
         startLine: function(x, y, type){
-            var line = new Line();
-            line.set("color_l",this.strokeColor);
-            line.type = type;
+          var line = new Line();
+          line.set("color_l",this.strokeColor);
+          line.type = type;
 
-            var path = new paper.Path();
-            path.model = line;
+          this.shadowPath = new paper.Path();
+          this.shadowPath.strokeColor = this.strokeColor;
+          this.shadowPath.dashArray = [10, 12];
 
-            path.strokeColor = this.strokeColor;
-            var start = new paper.Point(x, y);
-            path.add(start);
+          var path = new paper.Path();
+          path.model = line;
 
-            var _this = this;
-            line.save({"stroke_w":1},{
-                          success: function(model, response){
-                              _this.line = model;
-                              _this.line.path = path;
-                              _this.lines.add(model);
-                              _this.boardConnection.startPath(model.get("id"), x, y, model.get("color_l"));
-                              paper.view.draw();
-                          }
-                      });
+          path.strokeColor = this.strokeColor;
+          var start = new paper.Point(x, y);
+          path.add(start);
+          this.shadowPath.add(start);
+
+          var _this = this;
+          line.save({"stroke_w":1},{
+            success: function(model, response){
+              _this.line = model;
+              _this.line.path = path;
+              _this.lines.add(model);
+              _this.boardConnection.startPath(model.get("id"), x, y, model.get("color_l"));
+              paper.view.draw();
+            }
+          });
         },
 
         mouseMove: function(e){
             var _this = this;
             setTimeout(function() {
-                if(_this.line && e.which === 1 && _this.line.type  ===  "free"){
+                if(_this.line && e.which === 1){
+                  if(_this.line.type === "free") {
                     _this.line.path.add(new paper.Point(e.pageX, e.pageY));
                     _this.boardConnection.addPathPoint(_this.line.get("id"), e.pageX, e.pageY);
+                  } else {
+                    _this.shadowPath.removeSegment(1);
+                    _this.shadowPath.add(new paper.Point(e.pageX, e.pageY));
+                  }
                 }
                 paper.view.draw();
             }, 0);
         },
 
         finishLine: function(e){
-            if(this.line.type === "rect"){
-                this.line.path.add(new paper.Point(e.pageX, e.pageY));
-                this.boardConnection.addPathPoint(this.line.get("id"), e.pageX, e.pageY);
-            }
-            else{
-                this.line.path.simplify(10);
-            }
-            paper.view.draw();
-            this.boardConnection.finishPath(this.line.get("id"));
-            this.line.save({path: this.serialize(this.line.path)});
-            this.line = null;
+          if(this.line.type === "rect"){
+            this.shadowPath.remove();
+            this.line.path.add(new paper.Point(e.pageX, e.pageY));
+            this.boardConnection.addPathPoint(this.line.get("id"), e.pageX, e.pageY);
+          }
+          else{
+            this.line.path.simplify(10);
+          }
+          paper.view.draw();
+          this.boardConnection.finishPath(this.line.get("id"));
+          this.line.save({path: this.serialize(this.line.path)});
+          this.line = null;
         },
 
         serialize: function(path){
