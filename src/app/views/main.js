@@ -12,7 +12,9 @@ define('app/views/main',[
     el: $("body"),
     events: {
       "mouseover #menu_tool": "showMenu",
-      "mouseleave #menu": "hideMenu",
+      "mouseleave #menu_tool": "leaveMenuTool",
+      "mouseleave #menu": "leaveMenu",
+      "mouseenter #menu": "enteredMenu",
       "click #set-password": "showSetPasswordModal",
       "click #set-alias": "showSetAliasModal",
       "click #set-password-btn": "setBoardPassword",
@@ -34,10 +36,21 @@ define('app/views/main',[
       }});
     },
     showMenu: function() {
-      this.menu.show();
+        clearTimeout(this.menu.data('timeoutId'));
+        this.menu.show();
     },
-    hideMenu: function() {
-      this.menu.hide();
+    leaveMenu: function() {
+      this.menu.fadeOut('fast');
+    },
+    enteredMenu: function() {
+      clearTimeout(this.menu.data('timeoutId'));
+    },
+    leaveMenuTool: function(){
+        var menu = this.menu;
+        var timeoutId = setTimeout(function(){
+            menu.fadeOut('fast');
+        }, 200);
+        this.menu.data('timeoutId', timeoutId);
     },
     showSetPasswordModal: function(e) {
       e.preventDefault();
