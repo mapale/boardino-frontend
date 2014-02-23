@@ -125,8 +125,8 @@ function($, MainView, BoardView, BoardCanvas, BoardConnection, BoardMessageHandl
 
           toolbar.addTool($("#text_tool").tool(toolbar, {
             "action": function(){
-              $("#board").css('cursor','arrow');
-              boardView.selectTextTool();
+                $("#board").css('cursor','crosshair');
+                boardView.selectTextTool();
             }
           }));
         }
