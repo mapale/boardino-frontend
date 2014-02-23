@@ -120,7 +120,7 @@ function($, Backbone){
         createChangePostitColorTool: function() {
             var postitChangeColorTool = $("<div />")
                     .addClass("postit_color_tool");
-            postitChangeColorTool.mouseout(function() {
+            postitChangeColorTool.mouseleave(function() {
                 postitChangeColorTool.hide();
             });
             this.createColorSelectionElement("#FFFF33", "left").appendTo(postitChangeColorTool);
