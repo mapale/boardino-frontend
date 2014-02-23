@@ -121,7 +121,7 @@ function($, Backbone){
             var postitChangeColorTool = $("<div />")
                     .addClass("postit_color_tool");
             postitChangeColorTool.mouseleave(function() {
-                postitChangeColorTool.hide();
+                postitChangeColorTool.fadeOut('fast');
             });
             this.createColorSelectionElement("#FFFF33", "left").appendTo(postitChangeColorTool);
             this.createColorSelectionElement("#FF69B4", "right").appendTo(postitChangeColorTool);
