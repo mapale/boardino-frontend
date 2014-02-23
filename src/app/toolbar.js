@@ -18,18 +18,16 @@ function($) {
 
             var settings = $.extend({
                                         'element': this,
-                                        'enabledClass': this.attr('id')+'_enabled',
-                                        'disabledClass': this.attr('id')+'_disabled',
                                         'exclusive': true
             }, options);
 
             this.click(function(){
                 if(settings.exclusive){
                     $.each(toolbar.tools, function(i, otherTool){
-                        otherTool.element.attr({'class': otherTool.disabledClass});
+                        otherTool.element.removeClass('tool_enabled');
                     });
                 }
-                $(this).attr({'class':settings.enabledClass});
+                $(this).addClass('tool_enabled');
                 if(settings.confirmable){
                     $("#dialog").dialog({
                                             buttons : {

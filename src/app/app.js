@@ -31,22 +31,16 @@ function($, MainView, BoardView, BoardCanvas, BoardConnection, BoardMessageHandl
         $(document).ready(function() {
           initBoard();
           loadToolbar();
-          var pencil_tool = $("#pencil_tool");
+          var pencil_tool = $("#pencil_tools");
           pencil_tool.mouseover(function(){
-            $("#pencil_tool").width(200);
-            $("#selected_pencil_tool").hide();
-            $("#pencil_black_tool").show();
-            $("#pencil_green_tool").show();
-            $("#pencil_red_tool").show();
-            $("#pencil_blue_tool").show();
+              $("#pencil_green_tool").fadeIn('fast');
+              $("#pencil_red_tool").fadeIn('fast');
+              $("#pencil_blue_tool").fadeIn('fast');
           });
-          pencil_tool.mouseout(function(){
-            $("#pencil_tool").width(50);
-            $("#selected_pencil_tool").show();
-            $("#pencil_black_tool").hide();
-            $("#pencil_green_tool").hide();
-            $("#pencil_red_tool").hide();
-            $("#pencil_blue_tool").hide();
+          pencil_tool.mouseleave(function(){
+              $("#pencil_green_tool").fadeOut('fast');
+              $("#pencil_red_tool").fadeOut('fast');
+              $("#pencil_blue_tool").fadeOut('fast');
           });
 
           $(window).bind("beforeunload", function() {
@@ -70,9 +64,7 @@ function($, MainView, BoardView, BoardCanvas, BoardConnection, BoardMessageHandl
                     }
             }));
 
-            toolbar.addTool($("#selected_pencil_tool").tool(toolbar, {
-                    "enabledClass": "pencil_black_tool_enabled",
-                    "disabledClass": "pencil_tool_disabled",
+            toolbar.addTool($("#pencil_black_tool").tool(toolbar, {
                     "action": function(){}
             }));
 
@@ -80,7 +72,6 @@ function($, MainView, BoardView, BoardCanvas, BoardConnection, BoardMessageHandl
                     "action": function(){
                         $("#board").css('cursor','url(/static/images/pencil_disabled.ico),default');
                         boardView.selectPencilTool("black");
-                        $("#selected_pencil_tool").attr('class', "pencil_black_tool_enabled");
                     }
             }));
 
@@ -88,15 +79,15 @@ function($, MainView, BoardView, BoardCanvas, BoardConnection, BoardMessageHandl
                     "action": function(){
                         $("#board").css('cursor','url(/static/images/pencil_green_disabled.ico),default');
                         boardView.selectPencilTool("green");
-                        $("#selected_pencil_tool").attr('class', "pencil_green_tool_enabled");
-                    }
+                        $("#pencil_black_tool").addClass("tool_enabled");
+                   }
             }));
 
             toolbar.addTool($("#pencil_red_tool").tool(toolbar, {
                     "action": function(){
                         $("#board").css('cursor','url(/static/images/pencil_red_disabled.ico),default');
                         boardView.selectPencilTool("red");
-                        $("#selected_pencil_tool").attr('class', "pencil_red_tool_enabled");
+                        $("#pencil_black_tool").addClass("tool_enabled");
                     }
             }));
 
@@ -104,7 +95,7 @@ function($, MainView, BoardView, BoardCanvas, BoardConnection, BoardMessageHandl
                     "action": function(){
                         $("#board").css('cursor','url(/static/images/pencil_blue_disabled.ico),default');
                         boardView.selectPencilTool("blue");
-                        $("#selected_pencil_tool").attr('class', "pencil_blue_tool_enabled");
+                        $("#pencil_black_tool").addClass("tool_enabled");
                     }
             }));
 
