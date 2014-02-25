@@ -1,9 +1,10 @@
 /*globals define:false, window:false */
 define("app/utils",[
-
+	'backbone',
+	'app/models/userprofile'
 ],
 
-function(){
+function(Backbone, UserProfile){
 
 	function getBoardId() {
 		var urlparam = window.location.pathname.replace(/^\/([^\/]*).*$/, '$1');
@@ -12,7 +13,7 @@ function(){
 
     return {
 
-        getBoardId: getBoardId
+        getBoardId: getBoardId,
         
     };
     

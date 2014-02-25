@@ -63,7 +63,7 @@ define([
 
       Backbone._sync = Backbone.sync;
       Backbone.sync = function(method, model, options) {
-          if (method == 'create' || method == 'update' || method == 'delete') {
+          if (method == 'create' || method == 'update' || method == 'delete' || method == 'post' || method == 'get') {
               var csrfToken = getCookie('csrftoken');
 
               options.beforeSend = function(xhr){
