@@ -113,6 +113,6 @@ module.exports = function(grunt) {
   
   grunt.registerTask('build', ['test','clean','concat','copy:main']);
 
-  grunt.registerTask('deploy', ['clean','concat','uglify','copy:prod']);
+  grunt.registerTask('deploy', ['test', 'clean','concat','uglify','copy:prod']);
 
 };
