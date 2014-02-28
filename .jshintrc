@@ -19,7 +19,8 @@
     "beforeEach" : false,
     "afterEach"  : false,
     "expect"     : false,
-    "spyOn"      : false
+    "spyOn"      : false,
+    "window"     : false
   }
 }
 
