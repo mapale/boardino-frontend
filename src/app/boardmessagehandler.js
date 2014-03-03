@@ -67,7 +67,7 @@ function($) {
                 connectedUsers++;
                 $("#connected_users").text(connectedUsers);
                 $("<div/>").addClass("user_connected")
-                    .appendTo($("#notifications")).text("1 user joined!").show('slow')
+                    .appendTo($("#notifications")).text(args['username'] + " has joined!").show('slow')
                     .hide(4000, function(){$(this).remove();});
             },
             "disconnect": function(args){

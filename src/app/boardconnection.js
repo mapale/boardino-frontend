@@ -1,21 +1,33 @@
 /* globals define:false, io:false, window:false, $:false */
 define("app/boardconnection",[
     'jquery',
-    'io'
+    'io',
+    'app/models/userprofile',    
 ],
 
-function($,io) {
+function($,io,UserProfile) {
 
     'use strict';
 
     function BoardConnection(board_id, boardMessageHandler) {
         this.ws = io.connect( 'http://' + window['ws_host'] );
+        var userprofile = new UserProfile();
 
         var _this = this;
         this.ws.on('connect', function () {
-            _this.subscribe(board_id);
-            _this.ws.on('message', function (msg) {
-                boardMessageHandler.handle($.parseJSON(msg));
+            userprofile.fetch({ 
+                success: function(userProfile){
+                    _this.subscribe(board_id, userProfile.get('user').username);
+                    _this.ws.on('message', function (msg) {
+                        boardMessageHandler.handle($.parseJSON(msg));
+                    });
+                },
+                error: function(e){
+                    _this.subscribe(board_id, 'guest');
+                    _this.ws.on('message', function (msg) {
+                        boardMessageHandler.handle($.parseJSON(msg));
+                    });
+                }
             });
         });
     }
@@ -94,9 +106,11 @@ function($,io) {
             });
     };
 
-    BoardConnection.prototype.subscribe = function(board_id){
+    BoardConnection.prototype.subscribe = function(board_id, username){
         this.board_id = board_id;
-        this.send("register",{});
+        this.send("register",{
+            "username": username
+        });
     };
 
     BoardConnection.prototype.newPostit = function(postItId, x, y, width, height, text){
