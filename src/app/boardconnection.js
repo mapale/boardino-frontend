@@ -11,19 +11,27 @@ function($,io,UserProfile) {
 
     function BoardConnection(board_id, boardMessageHandler) {
         this.ws = io.connect( 'http://' + window['ws_host'] );
-        var userprofile = new UserProfile();
 
         var _this = this;
+        _this.user = new UserProfile();
         this.ws.on('connect', function () {
-            userprofile.fetch({ 
+            _this.user.fetch({ 
                 success: function(userProfile){
-                    _this.subscribe(board_id, userProfile.get('user').username);
+                    if(userProfile.get('user')){
+                        _this.user = userProfile.get('user');
+                    } else{
+                        var id = Math.floor((Math.random()*1000)+1);
+                        _this.user = {id: id, username: 'guess'};
+                    }
+                    _this.subscribe(board_id, _this.user);
                     _this.ws.on('message', function (msg) {
                         boardMessageHandler.handle($.parseJSON(msg));
                     });
                 },
                 error: function(e){
-                    _this.subscribe(board_id, 'guest');
+                    var id = Math.floor((Math.random()*1000)+1);
+                    _this.user = {id: id, username: 'anonymous'};
+                    _this.subscribe(board_id, _this.user);
                     _this.ws.on('message', function (msg) {
                         boardMessageHandler.handle($.parseJSON(msg));
                     });
@@ -39,6 +47,7 @@ function($,io,UserProfile) {
     BoardConnection.prototype.send = function(message, args){
         if (!args["channel_id"]) {
             args["channel_id"] = this.board_id;
+            args["user"] = this.user;
         }
         this.ws.send(JSON.stringify({
             "type": message,
@@ -106,10 +115,10 @@ function($,io,UserProfile) {
             });
     };
 
-    BoardConnection.prototype.subscribe = function(board_id, username){
+    BoardConnection.prototype.subscribe = function(board_id, user){
         this.board_id = board_id;
         this.send("register",{
-            "username": username
+            'user': user
         });
     };
 
