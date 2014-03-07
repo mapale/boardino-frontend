@@ -91,7 +91,7 @@ function($) {
                     .appendTo($("#notifications")).text(args['username']+" has left!").show('slow')
                     .hide(4000, function(){$(this).remove();});
 
-                $("#user_"+args['username']+'_'+args['id']).hide(2000, function(){$(this).remove();});
+                $("#user_"+args['username']+'_'+args['id']).hide(2000, function(){$(this).prev().remove();$(this).remove();});
             }
         };
 
