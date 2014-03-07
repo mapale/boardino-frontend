@@ -1,10 +1,11 @@
 /* globals define:false, io:false, window:false, $:false */
 define("app/boardconnection",[
     'jquery',
-    'io'
+    'io',
+    'app/models/userprofile',    
 ],
 
-function($,io) {
+function($,io,UserProfile) {
 
     'use strict';
 
@@ -12,10 +13,29 @@ function($,io) {
         this.ws = io.connect( 'http://' + window['ws_host'] );
 
         var _this = this;
+        _this.user = new UserProfile();
         this.ws.on('connect', function () {
-            _this.subscribe(board_id);
-            _this.ws.on('message', function (msg) {
-                boardMessageHandler.handle($.parseJSON(msg));
+            _this.user.fetch({ 
+                success: function(userProfile){
+                    if(userProfile.get('user')){
+                        _this.user = userProfile.get('user');
+                    } else{
+                        var id = Math.floor((Math.random()*1000)+1);
+                        _this.user = {id: id, username: 'guess'};
+                    }
+                    _this.subscribe(board_id, _this.user);
+                    _this.ws.on('message', function (msg) {
+                        boardMessageHandler.handle($.parseJSON(msg));
+                    });
+                },
+                error: function(e){
+                    var id = Math.floor((Math.random()*1000)+1);
+                    _this.user = {id: id, username: 'anonymous'};
+                    _this.subscribe(board_id, _this.user);
+                    _this.ws.on('message', function (msg) {
+                        boardMessageHandler.handle($.parseJSON(msg));
+                    });
+                }
             });
         });
     }
@@ -27,6 +47,7 @@ function($,io) {
     BoardConnection.prototype.send = function(message, args){
         if (!args["channel_id"]) {
             args["channel_id"] = this.board_id;
+            args["user"] = this.user;
         }
         this.ws.send(JSON.stringify({
             "type": message,
@@ -94,9 +115,11 @@ function($,io) {
             });
     };
 
-    BoardConnection.prototype.subscribe = function(board_id){
+    BoardConnection.prototype.subscribe = function(board_id, user){
         this.board_id = board_id;
-        this.send("register",{});
+        this.send("register",{
+            'user': user
+        });
     };
 
     BoardConnection.prototype.newPostit = function(postItId, x, y, width, height, text){
