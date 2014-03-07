@@ -27,14 +27,6 @@ function($,io,UserProfile) {
                     _this.ws.on('message', function (msg) {
                         boardMessageHandler.handle($.parseJSON(msg));
                     });
-                },
-                error: function(e){
-                    var id = Math.floor((Math.random()*1000)+1);
-                    _this.user = {id: id, username: 'anonymous'};
-                    _this.subscribe(board_id, _this.user);
-                    _this.ws.on('message', function (msg) {
-                        boardMessageHandler.handle($.parseJSON(msg));
-                    });
                 }
             });
         });
