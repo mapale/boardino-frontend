@@ -65,7 +65,7 @@ function($) {
                 for(var u in args['users']){
                     var user = args['users'][u];
                     if(user['username'] === 'guess'){
-                        $("#online_users").append('<br><a href="#" id="user_'+user['username']+'_'+user['id']+'">'+user['username']+'</a>');
+                        $("#online_users").append('<br><a href="#" id="user_'+user['username']+'_'+user['id']+'">'+user['username']+user['id']+'</a>');
                     } else {
                         $("#online_users").append('<br><a href="/accounts/'+user['username']+'" id="user_'+user['username']+'_'+user['id']+'" target="_blank">'+user['username']+'</a>');
                     }
@@ -79,7 +79,7 @@ function($) {
                     .hide(4000, function(){$(this).remove();});
 
                 if(args['user']['username'] === 'guess'){
-                    $("#online_users").append('<br><a href="#" id="user_'+args['user']['username']+'_'+args['user']['id']+'">'+args['user']['username']+'</a>');
+                    $("#online_users").append('<br><a href="#" id="user_'+args['user']['username']+'_'+args['user']['id']+'">'+args['user']['username']+args['user']['id']+'</a>');
                 } else{
                     $("#online_users").append('<br><a href="/accounts/'+args['user']['username']+'" id="user_'+args['user']['username']+'_'+args['user']['id']+'" target="_blank">'+args['user']['username']+'</a>');
                 }
@@ -88,7 +88,7 @@ function($) {
                 connectedUsers--;
                 $("#connected_users").text(connectedUsers);
                 $("<div/>").addClass("user_disconnected")
-                    .appendTo($("#notifications")).text(args['username'] + " has left!").show('slow')
+                    .appendTo($("#notifications")).text(args['username']+" has left!").show('slow')
                     .hide(4000, function(){$(this).remove();});
 
                 $("#user_"+args['username']+'_'+args['id']).hide(2000, function(){$(this).remove();});
