@@ -95,6 +95,21 @@ module.exports = function(grunt) {
         src: "release/*",
         dest: '../boardino/static/js/application.min.js'
       }
+    },
+
+    sass: {
+      dist: {
+        options: {
+          style: 'compressed'
+        },
+        files: [{
+          expand: true,
+          cwd: 'styles',
+          src: ['*.scss'],
+          dest: '../boardino/static/css',
+          ext: '.css'
+        }]
+      }
     }
 
   });
@@ -106,12 +121,13 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-requirejs');
   grunt.loadNpmTasks('grunt-contrib-copy');
+  grunt.loadNpmTasks('grunt-contrib-sass');
 
   grunt.registerTask('test', ['jshint', 'jasmine']);
 
   grunt.registerTask('default', ['test']);
   
-  grunt.registerTask('build', ['test','clean','concat','copy:main']);
+  grunt.registerTask('build', ['test','clean','concat','copy:main', 'sass']);
 
   grunt.registerTask('deploy', ['build','uglify','copy:prod']);
 
