@@ -19,8 +19,8 @@ function($, Backbone){
         initialize: function(attrs){
             this.boardConnection = attrs.boardConnection;
             this.model.bind('change', this.render, this);
-            this.model.bind('destroy', this.remove, this);
-            this.model.bind('remove', this.remove, this);
+            this.model.bind('destroy', this.doRemove, this);
+            this.model.bind('remove', this.doRemove, this);
             this.model.bind('focus', this.focus, this);
             var _this = this;
             this.$el.attr("id", "postit"+this.model.id)
@@ -64,6 +64,8 @@ function($, Backbone){
             this.createChangePostitColorTool().appendTo(this.$el);
 
             this.input = this.$('.postit_input');
+
+            this.$el.fadeIn('fast');
         },
 
         focus: function(){
@@ -153,6 +155,12 @@ function($, Backbone){
             this.$el.find(".postit_color_image").hide();//hideColorImage
             this.$el.css('padding-top','22px');
             this.$el.css('padding-bottom','2px');
+        },
+
+        doRemove: function(){
+            this.$el.fadeOut('fast', function(){
+                this.remove();
+            });
         }
     });
     return PostitView;

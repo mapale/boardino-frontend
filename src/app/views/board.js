@@ -19,7 +19,8 @@ function($, Backbone, PostitView, BoardCanvas, TextView, Board, Postit, Text, Po
         events: {
             "mousedown #board-canvas": "mousedown",
             "mousemove": "mouseMove",
-            "mouseup": "mouseUp"
+            "mouseup": "mouseUp",
+            "click #connected_users_btn": "toggleUsers"
         },
 
         initialize: function(attrs){
@@ -40,6 +41,10 @@ function($, Backbone, PostitView, BoardCanvas, TextView, Board, Postit, Text, Po
           this.texts.bind('reset', this.addAllTexts, this);
           this.texts.bind('all', this.render, this);
           this.texts.fetch();
+
+            $('#connected_users_btn').popover({
+                container: '#online_users'
+            });
         },
 
         mousedown: function(e){
@@ -195,6 +200,10 @@ function($, Backbone, PostitView, BoardCanvas, TextView, Board, Postit, Text, Po
 
         deleteLine: function(id){
             this.canvas.deleteLine(id);
+        },
+        toggleUsers: function(e){
+            e.preventDefault();
+            $("#online_users_container").toggle("slow");
         }
     });
 

@@ -199,24 +199,37 @@ body {
     top:15px;
 }
 
-#notifications, #online_users {
-    font-size: 16px;
-    max-width: 300px;
+#online_users_container {
     position: fixed;
-    right:5px;
-    text-align: center;
-    top:100px;
+    top:190px;
     z-index: 10000;
+    right:5px;
+    max-width: 300px;
+    display: none;
 }
 
-#connected_users{
-    position: relative;
-    top: 5px;
+#online_users_indicator {
+  text-align: center;
+  position: fixed;
+  top:100px;
+  z-index: 10000;
+  right:5px;
+  max-width: 300px;
+  a {
+    font-size: 18px;
+    color: $black;
+  }
+
 }
 
-#online_users {
-    text-align: right;
-    top:200px;
+#notifications {
+    font-size: 16px;
+    text-align: center;
+    position: fixed;
+    top:130px;
+    z-index: 10000;
+    right:5px;
+    max-width: 300px;
 }
 
 .user_connected{
@@ -227,6 +240,11 @@ body {
     padding-left: 10px;
     padding-right: 10px;
     white-space: nowrap;
+}
+
+.users-icon {
+  color: $black;
+  font-size: 18;
 }
 
 .user_disconnected{
