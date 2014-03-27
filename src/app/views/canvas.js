@@ -19,6 +19,10 @@ function($, Backbone, _, paper, Line, LineList){
             this.zoom = attrs.zoom;
             this.strokeColor = "black";
             var _this = this;
+            var canvas = this.el;
+            paper.setup(canvas);
+            paper.view.viewSize = new paper.Size(3000*this.zoom, 1500*this.zoom);
+            paper.view.draw();
             this.lines.fetch({success: function(lineList){
                 _.each(lineList.models, function(line){
                     if(line.get("path")){
@@ -26,11 +30,9 @@ function($, Backbone, _, paper, Line, LineList){
                         line.path.model = line;
                     }
                     line.bind('change:zoom', _this.render, _this);
+                    paper.view.draw();
                 });
-                paper.view.draw();
             }});
-            var canvas = this.el;
-            paper.setup(canvas);
         },
 
         render: function(){
@@ -202,10 +204,11 @@ function($, Backbone, _, paper, Line, LineList){
                         handleIn.y = jsonSegment.handleIn.y*_this.zoom;
                         handleOut.x = jsonSegment.handleOut.x*_this.zoom;
                         handleOut.y = jsonSegment.handleOut.y*_this.zoom;
-                        paper.view.draw();
                     });
                 }
             });
+            paper.view.viewSize = new paper.Size(3000*this.zoom, 1500*this.zoom);
+            paper.view.draw();
         }
     });
 

@@ -211,6 +211,7 @@ function($, Backbone, PostitView, BoardCanvas, TextView, Board, Postit, Text, Po
             this.texts.each(function(text){ text.setZoom(_this.zoom); });
             this.canvas.setZoom(this.zoom);
             $("#zoom_value").text(Math.round(this.zoom*100)+"%");
+            this.render();
         },
 
         zoomOut: function(event){
@@ -221,6 +222,13 @@ function($, Backbone, PostitView, BoardCanvas, TextView, Board, Postit, Text, Po
             this.texts.each(function(text){ text.setZoom(_this.zoom); });
             this.canvas.setZoom(this.zoom);
             $("#zoom_value").text(Math.round(this.zoom*100)+"%");
+            this.render();
+        },
+
+        render: function(){
+          $("#board").css('height', 1500*this.zoom).css('width', 3000*this.zoom);
+          $("#board-canvas").css('height', 1500*this.zoom).css('width', 3000*this.zoom)
+            .height(1500*this.zoom).width(3000*this.zoom);
         }
     });
 
