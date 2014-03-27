@@ -21,7 +21,8 @@ function($, Backbone, PostitView, BoardCanvas, TextView, Board, Postit, Text, Po
             "mousemove": "mouseMove",
             "mouseup": "mouseUp",
             "click #zoom_in": "zoomIn",
-            "click #zoom_out": "zoomOut"
+            "click #zoom_out": "zoomOut",
+            "click #connected_users_btn": "toggleUsers"
         },
 
         initialize: function(attrs){
@@ -43,6 +44,10 @@ function($, Backbone, PostitView, BoardCanvas, TextView, Board, Postit, Text, Po
           this.texts.bind('reset', this.addAllTexts, this);
           this.texts.bind('all', this.render, this);
           this.texts.fetch();
+
+            $('#connected_users_btn').popover({
+                container: '#online_users'
+            });
         },
 
         mousedown: function(e){
@@ -229,6 +234,10 @@ function($, Backbone, PostitView, BoardCanvas, TextView, Board, Postit, Text, Po
           $("#board").css('height', 1500*this.zoom).css('width', 3000*this.zoom);
           $("#board-canvas").css('height', 1500*this.zoom).css('width', 3000*this.zoom)
             .height(1500*this.zoom).width(3000*this.zoom);
+        },
+        toggleUsers: function(e){
+            e.preventDefault();
+            $("#online_users_container").toggle("slow");
         }
     });
 

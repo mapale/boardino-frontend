@@ -21,7 +21,7 @@ function($,io,UserProfile) {
                         _this.user = userProfile.get('user');
                     } else{
                         var id = Math.floor((Math.random()*1000)+1);
-                        _this.user = {id: id, username: 'guess'};
+                        _this.user = {id: id, username: 'guess'+id};
                     }
                     _this.subscribe(board_id, _this.user);
                     _this.ws.on('message', function (msg) {
