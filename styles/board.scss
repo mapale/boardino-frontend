@@ -126,7 +126,7 @@ body {
 }
 
 .text_input {
-    background-color: $black;
+    background-color: transparent;
     border:none;
     -moz-box-sizing:border-box;
     display:block;
@@ -199,7 +199,7 @@ body {
     top:15px;
 }
 
-#notifications, #online_users {
+#notifications, #online_users, #zoom {
     font-size: 16px;
     max-width: 300px;
     position: fixed;
@@ -216,7 +216,11 @@ body {
 
 #online_users {
     text-align: right;
-    top:200px;
+    top:120px;
+}
+
+#zoom {
+    top:80px;
 }
 
 .user_connected{

@@ -14,17 +14,19 @@ define('app/views/text',[
     initialize: function(options)
     {
       this.boardConnection = options.boardConnection;
+      this.zoom = options.zoom;
       this.model.bind('change', this.render, this);
       this.model.bind('remove', this.remove, this);
+      this.model.bind('change:zoom', this.render, this);
       var _this = this;
       this.$el.attr("id", "text"+this.model.id)
         .addClass("text");
-      this.$el.css("top", this.model.get("y")+"px")
+      this.$el.css("top", (this.model.get("y")*this.zoom)+"px")
         .css("position", "absolute")
-        .css("left", this.model.get("x")+"px")
+        .css("left", (this.model.get("x")*this.zoom)+"px")
         .css("padding", "22px 2px 2px 2px")
-        .css("width", this.model.get("width")+"px")
-        .css("height", this.model.get("height")+"px");
+        .css("width", (this.model.get("width")*this.zoom)+"px")
+        .css("height", (this.model.get("height")*this.zoom)+"px");
       this.$el.draggable({
         cursor: "move",
         containment: "parent",
@@ -55,11 +57,12 @@ define('app/views/text',[
     },
     render: function(){
       this.$el
-        .css("top", this.model.get("y")+"px")
-        .css("left", this.model.get("x")+"px")
-        .css("width", this.model.get("width")+"px")
-        .css("height", this.model.get("height")+"px");
-      this.input.val(this.model.get("text"));
+        .css("top", (this.model.get("y")*this.model.zoom)+"px")
+        .css("left", (this.model.get("x")*this.model.zoom)+"px")
+        .css("width", (this.model.get("width")*this.model.zoom)+"px")
+        .css("height", (this.model.get("height")*this.model.zoom)+"px");
+      this.input.val(this.model.get("text"))
+        .css("font-size", (12*this.model.zoom)+"px");
       return this;
     },
     createCloseElement: function(){

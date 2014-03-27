@@ -18,18 +18,20 @@ function($, Backbone){
 
         initialize: function(attrs){
             this.boardConnection = attrs.boardConnection;
+            this.zoom = attrs.zoom;
             this.model.bind('change', this.render, this);
             this.model.bind('destroy', this.remove, this);
             this.model.bind('remove', this.remove, this);
             this.model.bind('focus', this.focus, this);
+            this.model.bind('change:zoom', this.render, this);
             var _this = this;
             this.$el.attr("id", "postit"+this.model.id)
                     .addClass("postit")
                     .css("position", "absolute")
-                    .css("top", this.model.get("y")+"px")
-                    .css("left", this.model.get("x")+"px")
-                    .css("width", this.model.get("width")+"px")
-                    .css("height", this.model.get("height")+"px")
+                    .css("top", (this.model.get("y")*this.zoom)+"px")
+                    .css("left", (this.model.get("x")*this.zoom)+"px")
+                    .css("width", (this.model.get("width")*this.zoom)+"px")
+                    .css("height", (this.model.get("height")*this.zoom)+"px")
                     .css("padding", "22px 2px 2px 2px")
                     .css("background-color", this.model.get("back_color"))
                     .draggable({
@@ -72,12 +74,13 @@ function($, Backbone){
 
         render: function(){
             this.$el
-                .css("top", this.model.get("y")+"px")
-                .css("left", this.model.get("x")+"px")
-                .css("width", this.model.get("width")+"px")
-                .css("height", this.model.get("height")+"px")
+                .css("top", (this.model.get("y")*this.model.zoom)+"px")
+                .css("left", (this.model.get("x")*this.model.zoom)+"px")
+                .css("width", (this.model.get("width")*this.model.zoom)+"px")
+                .css("height", (this.model.get("height")*this.model.zoom)+"px")
                 .css("background-color", this.model.get("back_color"));
-            this.input.css('background-color', this.model.get("back_color"));
+            this.input.css('background-color', this.model.get("back_color"))
+                .css("font-size", (12*this.model.zoom)+"px");
             this.input.val(this.model.get("text"));
             return this;
         },
