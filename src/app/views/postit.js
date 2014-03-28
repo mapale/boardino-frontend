@@ -44,12 +44,7 @@ function($, Backbone){
                         },
                         stop: function(){
                             var position = $(this).position();
-                            _this.model.save({x: Math.round(position.left/_this.model.zoom), y: Math.round(position.top/_this.model.zoom)},
-                                {
-                                    success: function(model) { console.log(_this.model.get("x"));  console.log(_this.model.get("y")); }
-                                });
-                            console.log(position);
-                            console.log(_this.model.zoom);
+                            _this.model.save({x: Math.round(position.left/_this.model.zoom), y: Math.round(position.top/_this.model.zoom)});
                         }
                     })
                     .resizable({
