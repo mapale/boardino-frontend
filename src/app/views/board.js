@@ -109,11 +109,13 @@ function($, Backbone, PostitView, BoardCanvas, TextView, Board, Postit, Text, Po
         showPostit: function(id){
             var postit = new Postit({id:id});
             postit.fetch();
+            postit.setZoom(this.zoom);
             this.postits.add(postit);
         },
         showText: function(id){
           var _this = this;
           var text = new Text({id:id});
+          text.setZoom(this.zoom);
           text.fetch({
             success: function(){
               _this.texts.add(text);
@@ -235,6 +237,7 @@ function($, Backbone, PostitView, BoardCanvas, TextView, Board, Postit, Text, Po
           $("#board-canvas").css('height', 1500*this.zoom).css('width', 3000*this.zoom)
             .height(1500*this.zoom).width(3000*this.zoom);
         },
+
         toggleUsers: function(e){
             e.preventDefault();
             $("#online_users_container").toggle("slow");
