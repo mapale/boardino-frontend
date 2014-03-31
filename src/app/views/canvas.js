@@ -63,7 +63,7 @@ function($, Backbone, _, paper, Line, LineList){
               _this.line = model;
               _this.line.path = path;
               _this.lines.add(model);
-              _this.boardConnection.startPath(model.get("id"), x, y, model.get("color_l"));
+              _this.boardConnection.startPath(model.get("id"), x/_this.zoom, y/_this.zoom, model.get("color_l"));
               paper.view.draw();
             }
           });
@@ -75,7 +75,7 @@ function($, Backbone, _, paper, Line, LineList){
                 if(_this.line && e.which === 1){
                   if(_this.line.type === "free") {
                     _this.line.path.add(new paper.Point(e.pageX, e.pageY));
-                    _this.boardConnection.addPathPoint(_this.line.get("id"), e.pageX, e.pageY);
+                    _this.boardConnection.addPathPoint(_this.line.get("id"), e.pageX/_this.zoom, e.pageY/_this.zoom);
                   } else {
                     _this.shadowPath.removeSegment(1);
                     _this.shadowPath.add(new paper.Point(e.pageX, e.pageY));
@@ -97,6 +97,7 @@ function($, Backbone, _, paper, Line, LineList){
           paper.view.draw();
           this.boardConnection.finishPath(this.line.get("id"));
           this.line.save({path: this.serialize(this.line.path)});
+          this.lines.add(this.line);
           this.line = null;
         },
 
@@ -127,7 +128,7 @@ function($, Backbone, _, paper, Line, LineList){
         startPath: function(id, x, y, color){
             var line = new Line({id:id});
             var path = new paper.Path();
-            path.add(new paper.Point(x, y));
+            path.add(new paper.Point(x*this.zoom, y*this.zoom));
             line.path = path;
             line.path.model = line;
             line.fetch({
@@ -139,12 +140,13 @@ function($, Backbone, _, paper, Line, LineList){
         },
 
         addPathPoint: function(id, x, y){
-            this.lines.get(id).path.add(new paper.Point(x, y));
+            this.lines.get(id).path.add(new paper.Point(x*this.zoom, y*this.zoom));
             paper.view.draw();
         },
 
         finishPath: function(id){
             this.lines.get(id).path.simplify(10);
+            this.lines.get(id).fetch();
             paper.view.draw();
         },
 
@@ -193,18 +195,20 @@ function($, Backbone, _, paper, Line, LineList){
             _.each(this.lines.models, function(line){
                 if(line.path){
                     var segments = line.path.getSegments();
-                    $.each($.parseJSON(line.get("path")), function(i, jsonSegment){
-                        var paperSegment = segments[i];
-                        var point = paperSegment.getPoint();
-                        var handleIn = paperSegment.getHandleIn();
-                        var handleOut = paperSegment.getHandleOut();
-                        point.x = jsonSegment.point.x*_this.zoom;
-                        point.y = jsonSegment.point.y*_this.zoom;
-                        handleIn.x = jsonSegment.handleIn.x*_this.zoom;
-                        handleIn.y = jsonSegment.handleIn.y*_this.zoom;
-                        handleOut.x = jsonSegment.handleOut.x*_this.zoom;
-                        handleOut.y = jsonSegment.handleOut.y*_this.zoom;
-                    });
+                    if(line.get("path")){
+                        $.each($.parseJSON(line.get("path")), function(i, jsonSegment){
+                            var paperSegment = segments[i];
+                            var point = paperSegment.getPoint();
+                            var handleIn = paperSegment.getHandleIn();
+                            var handleOut = paperSegment.getHandleOut();
+                            point.x = jsonSegment.point.x*_this.zoom;
+                            point.y = jsonSegment.point.y*_this.zoom;
+                            handleIn.x = jsonSegment.handleIn.x*_this.zoom;
+                            handleIn.y = jsonSegment.handleIn.y*_this.zoom;
+                            handleOut.x = jsonSegment.handleOut.x*_this.zoom;
+                            handleOut.y = jsonSegment.handleOut.y*_this.zoom;
+                        });
+                    }
                 }
             });
             paper.view.viewSize = new paper.Size(3000*this.zoom, 1500*this.zoom);
