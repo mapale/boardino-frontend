@@ -86,19 +86,21 @@ function($, Backbone, _, paper, Line, LineList){
         },
 
         finishLine: function(e){
-          if(this.line.type === "rect"){
-            this.shadowPath.remove();
-            this.line.path.add(new paper.Point(e.pageX, e.pageY));
-            this.boardConnection.addPathPoint(this.line.get("id"), e.pageX/this.zoom, e.pageY/this.zoom);
+          if(this.line){
+            if(this.line.type === "rect"){
+              this.shadowPath.remove();
+              this.line.path.add(new paper.Point(e.pageX, e.pageY));
+              this.boardConnection.addPathPoint(this.line.get("id"), e.pageX/this.zoom, e.pageY/this.zoom);
+            }
+            else{
+              this.line.path.simplify(10);
+            }
+            paper.view.draw();
+            this.boardConnection.finishPath(this.line.get("id"));
+            this.line.save({path: this.serialize(this.line.path)});
+            this.lines.add(this.line);
+            this.line = null;
           }
-          else{
-            this.line.path.simplify(10);
-          }
-          paper.view.draw();
-          this.boardConnection.finishPath(this.line.get("id"));
-          this.line.save({path: this.serialize(this.line.path)});
-          this.lines.add(this.line);
-          this.line = null;
         },
 
         serialize: function(path){
