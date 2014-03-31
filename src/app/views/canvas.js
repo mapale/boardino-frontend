@@ -26,7 +26,7 @@ function($, Backbone, _, paper, Line, LineList){
             this.lines.fetch({success: function(lineList){
                 _.each(lineList.models, function(line){
                     if(line.get("path")){
-                        line.path = _this.lineToPath(line);
+                        line.path = _this.drawLinePath(line);
                         line.path.model = line;
                     }
                     line.bind('change:zoom', _this.render, _this);
@@ -118,7 +118,7 @@ function($, Backbone, _, paper, Line, LineList){
         },
 
         // Convert a line model to paper.pathObject
-        lineToPath: function(line){
+        drawLinePath: function(line){
             var path = new paper.Path();
             path.strokeColor = line.get("color_l");
             $.each($.parseJSON(line.get("path")), function(i, segment){
@@ -147,9 +147,13 @@ function($, Backbone, _, paper, Line, LineList){
         },
 
         finishPath: function(id){
+            var _this = this;
             this.lines.get(id).path.simplify(10);
-            this.lines.get(id).fetch();
-            paper.view.draw();
+            this.lines.get(id).fetch({success: function(line){
+                line.path.remove();
+                line.path = _this.drawLinePath(line);
+                paper.view.draw();
+            }});
         },
 
         setStrokeColor: function(color){
@@ -185,9 +189,12 @@ function($, Backbone, _, paper, Line, LineList){
         },
 
         deleteLine: function(id){
-            if( this.lines.get(id)){
-                this.lines.get(id).path.remove();
-                paper.view.draw();
+            var line = this.lines.get(id);
+            if( line){
+                if (line.path) {
+                    line.path.remove();
+                    paper.view.draw();
+                }
             }
         },
 
@@ -200,15 +207,17 @@ function($, Backbone, _, paper, Line, LineList){
                     if(line.get("path")){
                         $.each($.parseJSON(line.get("path")), function(i, jsonSegment){
                             var paperSegment = segments[i];
-                            var point = paperSegment.getPoint();
-                            var handleIn = paperSegment.getHandleIn();
-                            var handleOut = paperSegment.getHandleOut();
-                            point.x = jsonSegment.point.x*_this.zoom;
-                            point.y = jsonSegment.point.y*_this.zoom;
-                            handleIn.x = jsonSegment.handleIn.x*_this.zoom;
-                            handleIn.y = jsonSegment.handleIn.y*_this.zoom;
-                            handleOut.x = jsonSegment.handleOut.x*_this.zoom;
-                            handleOut.y = jsonSegment.handleOut.y*_this.zoom;
+                            if (paperSegment) {
+                                var point = paperSegment.getPoint();
+                                var handleIn = paperSegment.getHandleIn();
+                                var handleOut = paperSegment.getHandleOut();
+                                point.x = jsonSegment.point.x*_this.zoom;
+                                point.y = jsonSegment.point.y*_this.zoom;
+                                handleIn.x = jsonSegment.handleIn.x*_this.zoom;
+                                handleIn.y = jsonSegment.handleIn.y*_this.zoom;
+                                handleOut.x = jsonSegment.handleOut.x*_this.zoom;
+                                handleOut.y = jsonSegment.handleOut.y*_this.zoom;
+                            }
                         });
                     }
                 }
