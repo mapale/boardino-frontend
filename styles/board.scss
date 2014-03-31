@@ -20,10 +20,6 @@ html {
 }
 
 body {
-    background-image: linear-gradient(rgba(200, 200, 200, 0.20) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(200, 200, 200, 0.20) 1px, transparent 1px);
-    background-position:-2px -2px, -2px -2px, -1px -1px, -1px -1px;
-    background-size:28px 28px, 28px 28px, 20px 20px, 20px 20px;
     margin-top: 0;
     padding-top: 0;
     top: 0;
@@ -49,6 +45,14 @@ body {
 #bottom { bottom: 0; }
 
 #board{
+    background-image: linear-gradient(rgba(200, 200, 200, 0.20) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(200, 200, 200, 0.20) 1px, transparent 1px);
+    background-position:-2px -2px, -2px -2px, -1px -1px, -1px -1px;
+    background-size:28px 28px, 28px 28px, 20px 20px, 20px 20px;
+    border: 1px solid rgba(200, 200, 200, 0.20);
+}
+
+#board, #board-canvas{
     height: 1500px;
     left: 0;
     position:absolute;
@@ -126,7 +130,7 @@ body {
 }
 
 .text_input {
-    background-color: $black;
+    background-color: transparent;
     border:none;
     -moz-box-sizing:border-box;
     display:block;
@@ -199,6 +203,16 @@ body {
     top:15px;
 }
 
+#notifications, #zoom {
+    font-size: 16px;
+    max-width: 300px;
+    position: fixed;
+    top:120px;
+    z-index: 10000;
+    right:5px;
+    max-width: 300px;
+}
+
 #online_users_container {
     position: fixed;
     top:190px;
@@ -219,17 +233,15 @@ body {
     font-size: 18px;
     color: $black;
   }
-
 }
 
-#notifications {
-    font-size: 16px;
-    text-align: center;
-    position: fixed;
-    top:130px;
-    z-index: 10000;
-    right:5px;
-    max-width: 300px;
+#online_users {
+    text-align: right;
+    top:120px;
+}
+
+#zoom {
+    top:80px;
 }
 
 .user_connected{

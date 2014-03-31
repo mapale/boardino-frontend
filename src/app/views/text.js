@@ -14,8 +14,10 @@ define('app/views/text',[
     initialize: function(options)
     {
       this.boardConnection = options.boardConnection;
+      this.zoom = options.zoom;
       this.model.bind('change', this.render, this);
       this.model.bind('remove', this.remove, this);
+      this.model.bind('change:zoom', this.render, this);
       var _this = this;
       this.$el.attr("id", "text"+this.model.id)
         .addClass("text");
@@ -30,23 +32,23 @@ define('app/views/text',[
         containment: "parent",
         drag: function(){
           var position = $(this).position();
-          _this.boardConnection.moveText(_this.model.get("id"), position.left, position.top);
+          _this.boardConnection.moveText(_this.model.get("id"), position.left/_this.model.zoom, position.top/_this.model.zoom);
         },
         stop: function(){
           var position = $(this).position();
-          _this.model.save({x: position.left, y: position.top});
+          _this.model.save({x: Math.round(position.left/_this.model.zoom), y: Math.round(position.top/_this.model.zoom)});
         }
       }).resizable({
           autoHide: true,
           resize: function(){
             var width = $(this).width();
             var height = $(this).height();
-            _this.boardConnection.resizeText(_this.model.get("id"), width, height);
+            _this.boardConnection.resizeText(_this.model.get("id"), width/_this.model.zoom, height/_this.model.zoom);
           },
           stop: function(event, ui){
             var width = ui.size.width;
             var height = ui.size.height;
-            _this.model.save({width: width, height: height});
+            _this.model.save({width: Math.round(width/_this.model.zoom), height: Math.round(height/_this.model.zoom)});
           }
         });
       this.createCloseElement().appendTo(this.$el);
@@ -55,11 +57,12 @@ define('app/views/text',[
     },
     render: function(){
       this.$el
-        .css("top", this.model.get("y")+"px")
-        .css("left", this.model.get("x")+"px")
-        .css("width", this.model.get("width")+"px")
-        .css("height", this.model.get("height")+"px");
-      this.input.val(this.model.get("text"));
+        .css("top", (this.model.get("y")*this.model.zoom)+"px")
+        .css("left", (this.model.get("x")*this.model.zoom)+"px")
+        .css("width", (this.model.get("width")*this.model.zoom)+"px")
+        .css("height", (this.model.get("height")*this.model.zoom)+"px");
+      this.input.val(this.model.get("text"))
+        .css("font-size", (12*this.model.zoom)+"px");
       return this;
     },
     createCloseElement: function(){

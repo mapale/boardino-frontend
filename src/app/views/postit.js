@@ -18,10 +18,12 @@ function($, Backbone){
 
         initialize: function(attrs){
             this.boardConnection = attrs.boardConnection;
+            this.zoom = attrs.zoom;
             this.model.bind('change', this.render, this);
             this.model.bind('destroy', this.doRemove, this);
             this.model.bind('remove', this.doRemove, this);
             this.model.bind('focus', this.focus, this);
+            this.model.bind('change:zoom', this.render, this);
             var _this = this;
             this.$el.attr("id", "postit"+this.model.id)
                     .addClass("postit")
@@ -38,23 +40,23 @@ function($, Backbone){
                         containment: "parent",
                         drag: function(){
                             var position = $(this).position();
-                            _this.boardConnection.movePostit(_this.model.get("id"), position.left, position.top);
+                            _this.boardConnection.movePostit(_this.model.get("id"), position.left/_this.model.zoom, position.top/_this.model.zoom);
                         },
                         stop: function(){
                             var position = $(this).position();
-                            _this.model.save({x: position.left, y: position.top});
+                            _this.model.save({x: Math.round(position.left/_this.model.zoom), y: Math.round(position.top/_this.model.zoom)});
                         }
                     })
                     .resizable({
                         resize: function(){
                             var width = $(this).width();
                             var height = $(this).height();
-                            _this.boardConnection.resizePostit(_this.model.get("id"), width, height);
+                            _this.boardConnection.resizePostit(_this.model.get("id"), width/_this.model.zoom, height/_this.model.zoom);
                         },
                         stop: function(event, ui){
                             var width = ui.size.width;
                             var height = ui.size.height;
-                            _this.model.save({width: width, height: height});
+                            _this.model.save({width: Math.round(width/_this.model.zoom), height: Math.round(height/_this.model.zoom)});
                         }
                     });
 
@@ -74,12 +76,13 @@ function($, Backbone){
 
         render: function(){
             this.$el
-                .css("top", this.model.get("y")+"px")
-                .css("left", this.model.get("x")+"px")
-                .css("width", this.model.get("width")+"px")
-                .css("height", this.model.get("height")+"px")
+                .css("top", (this.model.get("y")*this.model.zoom)+"px")
+                .css("left", (this.model.get("x")*this.model.zoom)+"px")
+                .css("width", (this.model.get("width")*this.model.zoom)+"px")
+                .css("height", (this.model.get("height")*this.model.zoom)+"px")
                 .css("background-color", this.model.get("back_color"));
-            this.input.css('background-color', this.model.get("back_color"));
+            this.input.css('background-color', this.model.get("back_color"))
+                .css("font-size", (12*this.model.zoom)+"px");
             this.input.val(this.model.get("text"));
             return this;
         },

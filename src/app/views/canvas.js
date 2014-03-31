@@ -16,19 +16,23 @@ function($, Backbone, _, paper, Line, LineList){
 
         initialize: function(attrs){
             this.boardConnection = attrs.boardConnection;
+            this.zoom = attrs.zoom;
             this.strokeColor = "black";
             var _this = this;
+            var canvas = this.el;
+            paper.setup(canvas);
+            paper.view.viewSize = new paper.Size(3000*this.zoom, 1500*this.zoom);
+            paper.view.draw();
             this.lines.fetch({success: function(lineList){
                 _.each(lineList.models, function(line){
                     if(line.get("path")){
                         line.path = _this.lineToPath(line);
                         line.path.model = line;
                     }
+                    line.bind('change:zoom', _this.render, _this);
+                    paper.view.draw();
                 });
-                paper.view.draw();
             }});
-            var canvas = this.el;
-            paper.setup(canvas);
         },
 
         render: function(){
@@ -53,12 +57,13 @@ function($, Backbone, _, paper, Line, LineList){
           this.shadowPath.add(start);
 
           var _this = this;
+
           line.save({"stroke_w":1},{
             success: function(model, response){
               _this.line = model;
               _this.line.path = path;
               _this.lines.add(model);
-              _this.boardConnection.startPath(model.get("id"), x, y, model.get("color_l"));
+              _this.boardConnection.startPath(model.get("id"), x/_this.zoom, y/_this.zoom, model.get("color_l"));
               paper.view.draw();
             }
           });
@@ -70,7 +75,7 @@ function($, Backbone, _, paper, Line, LineList){
                 if(_this.line && e.which === 1){
                   if(_this.line.type === "free") {
                     _this.line.path.add(new paper.Point(e.pageX, e.pageY));
-                    _this.boardConnection.addPathPoint(_this.line.get("id"), e.pageX, e.pageY);
+                    _this.boardConnection.addPathPoint(_this.line.get("id"), e.pageX/_this.zoom, e.pageY/_this.zoom);
                   } else {
                     _this.shadowPath.removeSegment(1);
                     _this.shadowPath.add(new paper.Point(e.pageX, e.pageY));
@@ -81,33 +86,38 @@ function($, Backbone, _, paper, Line, LineList){
         },
 
         finishLine: function(e){
-          if(this.line.type === "rect"){
-            this.shadowPath.remove();
-            this.line.path.add(new paper.Point(e.pageX, e.pageY));
-            this.boardConnection.addPathPoint(this.line.get("id"), e.pageX, e.pageY);
+          if(this.line){
+            if(this.line.type === "rect"){
+              this.shadowPath.remove();
+              this.line.path.add(new paper.Point(e.pageX, e.pageY));
+              this.boardConnection.addPathPoint(this.line.get("id"), e.pageX/this.zoom, e.pageY/this.zoom);
+            }
+            else{
+              this.line.path.simplify(10);
+            }
+            paper.view.draw();
+            this.boardConnection.finishPath(this.line.get("id"));
+            this.line.save({path: this.serialize(this.line.path)});
+            this.lines.add(this.line);
+            this.line = null;
           }
-          else{
-            this.line.path.simplify(10);
-          }
-          paper.view.draw();
-          this.boardConnection.finishPath(this.line.get("id"));
-          this.line.save({path: this.serialize(this.line.path)});
-          this.line = null;
         },
 
         serialize: function(path){
             var pathToSerialize = [];
+            var _this = this;
             $.each(path.getSegments(), function(i, segment){
                 var segmentToSerialize = {
-                    point: {x: segment.getPoint().x, y: segment.getPoint().y},
-                    handleIn :  {x: segment.getHandleIn().x, y: segment.getHandleIn().y},
-                    handleOut :  {x: segment.getHandleOut().x, y: segment.getHandleOut().y}
+                    point: {x: segment.getPoint().x/_this.zoom, y: segment.getPoint().y/_this.zoom},
+                    handleIn :  {x: segment.getHandleIn().x/_this.zoom, y: segment.getHandleIn().y/_this.zoom},
+                    handleOut :  {x: segment.getHandleOut().x/_this.zoom, y: segment.getHandleOut().y/_this.zoom}
                 };
                 pathToSerialize.push(segmentToSerialize);
             });
             return JSON.stringify(pathToSerialize);
         },
 
+        // Convert a line model to paper.pathObject
         lineToPath: function(line){
             var path = new paper.Path();
             path.strokeColor = line.get("color_l");
@@ -120,7 +130,7 @@ function($, Backbone, _, paper, Line, LineList){
         startPath: function(id, x, y, color){
             var line = new Line({id:id});
             var path = new paper.Path();
-            path.add(new paper.Point(x, y));
+            path.add(new paper.Point(x*this.zoom, y*this.zoom));
             line.path = path;
             line.path.model = line;
             line.fetch({
@@ -132,12 +142,13 @@ function($, Backbone, _, paper, Line, LineList){
         },
 
         addPathPoint: function(id, x, y){
-            this.lines.get(id).path.add(new paper.Point(x, y));
+            this.lines.get(id).path.add(new paper.Point(x*this.zoom, y*this.zoom));
             paper.view.draw();
         },
 
         finishPath: function(id){
             this.lines.get(id).path.simplify(10);
+            this.lines.get(id).fetch();
             paper.view.draw();
         },
 
@@ -178,6 +189,32 @@ function($, Backbone, _, paper, Line, LineList){
                 this.lines.get(id).path.remove();
                 paper.view.draw();
             }
+        },
+
+        setZoom: function(zoom) {
+            var _this = this;
+            this.zoom = zoom;
+            _.each(this.lines.models, function(line){
+                if(line.path){
+                    var segments = line.path.getSegments();
+                    if(line.get("path")){
+                        $.each($.parseJSON(line.get("path")), function(i, jsonSegment){
+                            var paperSegment = segments[i];
+                            var point = paperSegment.getPoint();
+                            var handleIn = paperSegment.getHandleIn();
+                            var handleOut = paperSegment.getHandleOut();
+                            point.x = jsonSegment.point.x*_this.zoom;
+                            point.y = jsonSegment.point.y*_this.zoom;
+                            handleIn.x = jsonSegment.handleIn.x*_this.zoom;
+                            handleIn.y = jsonSegment.handleIn.y*_this.zoom;
+                            handleOut.x = jsonSegment.handleOut.x*_this.zoom;
+                            handleOut.y = jsonSegment.handleOut.y*_this.zoom;
+                        });
+                    }
+                }
+            });
+            paper.view.viewSize = new paper.Size(3000*this.zoom, 1500*this.zoom);
+            paper.view.draw();
         }
     });
 

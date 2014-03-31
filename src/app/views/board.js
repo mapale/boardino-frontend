@@ -20,14 +20,17 @@ function($, Backbone, PostitView, BoardCanvas, TextView, Board, Postit, Text, Po
             "mousedown #board-canvas": "mousedown",
             "mousemove": "mouseMove",
             "mouseup": "mouseUp",
+            "click #zoom_in": "zoomIn",
+            "click #zoom_out": "zoomOut",
             "click #connected_users_btn": "toggleUsers"
         },
 
         initialize: function(attrs){
           this.boardConnection = attrs.boardConnection;
+          this.zoom = 1;
 
           this.tool = "postits";
-          this.canvas = new BoardCanvas({boardConnection: this.boardConnection});
+          this.canvas = new BoardCanvas({boardConnection: this.boardConnection, zoom: this.zoom});
           this.canvas.render();
 
           this.postits = new PostitList();
@@ -59,7 +62,8 @@ function($, Backbone, PostitView, BoardCanvas, TextView, Board, Postit, Text, Po
             }
             var _this = this;
             if (this.tool === "postits") {
-                var postit = new Postit({"x":e.pageX, "y":e.pageY, "width":120, "height":120, "text":""});
+                var postit = new Postit({"x":Math.round(e.pageX/_this.zoom), "y":Math.round(e.pageY/_this.zoom), "width":120, "height":120, "text":""});
+                postit.setZoom(_this.zoom);
                 this.postits.add(postit);//TODO: check what is this doing
                 postit.save(null, {
                     success: function(model, response){
@@ -71,12 +75,14 @@ function($, Backbone, PostitView, BoardCanvas, TextView, Board, Postit, Text, Po
             if (this.tool === "text") {
               var text = new Text({
                 text: "",
-                x: e.pageX,
-                y: e.pageY,
+                x: Math.round(e.pageX/_this.zoom),
+                y: Math.round(e.pageY/_this.zoom),
                 width: 150,
                 height: 50
               });
-              var view = new TextView({model: text, boardConnection: this.boardConnection});
+              text.setZoom(_this.zoom);
+              this.texts.add(text);
+              var view = new TextView({model: text, boardConnection: this.boardConnection, zoom: _this.zoom});
               $("#board").append(view.render().el);
 
               text.save(null, {
@@ -103,11 +109,13 @@ function($, Backbone, PostitView, BoardCanvas, TextView, Board, Postit, Text, Po
         showPostit: function(id){
             var postit = new Postit({id:id});
             postit.fetch();
+            postit.setZoom(this.zoom);
             this.postits.add(postit);
         },
         showText: function(id){
           var _this = this;
           var text = new Text({id:id});
+          text.setZoom(this.zoom);
           text.fetch({
             success: function(){
               _this.texts.add(text);
@@ -121,11 +129,11 @@ function($, Backbone, PostitView, BoardCanvas, TextView, Board, Postit, Text, Po
             this.texts.each(this.addOneText, this);
         },
         addOne: function(postit){
-            var view = new PostitView({model: postit, boardConnection: this.boardConnection});
+            var view = new PostitView({model: postit, boardConnection: this.boardConnection, zoom: this.zoom});
             $("#board").append(view.render().el);
         },
         addOneText: function(text){
-          var view = new TextView({model: text, boardConnection: this.boardConnection});
+          var view = new TextView({model: text, boardConnection: this.boardConnection, zoom: this.zoom});
           $("#board").append(view.render().el);
         },
         movePostit: function(id, newX, newY){
@@ -201,6 +209,35 @@ function($, Backbone, PostitView, BoardCanvas, TextView, Board, Postit, Text, Po
         deleteLine: function(id){
             this.canvas.deleteLine(id);
         },
+
+        zoomIn: function(event){
+            event.preventDefault();
+            if(this.zoom < 2) { this.zoom += 0.1; }
+            var _this = this;
+            this.postits.each(function(postit){ postit.setZoom(_this.zoom); });
+            this.texts.each(function(text){ text.setZoom(_this.zoom); });
+            this.canvas.setZoom(this.zoom);
+            $("#zoom_value").text(Math.round(this.zoom*100)+"%");
+            this.render();
+        },
+
+        zoomOut: function(event){
+            event.preventDefault();
+            if(this.zoom > 0.25) { this.zoom -= 0.1; }
+            var _this = this;
+            this.postits.each(function(postit){ postit.setZoom(_this.zoom); });
+            this.texts.each(function(text){ text.setZoom(_this.zoom); });
+            this.canvas.setZoom(this.zoom);
+            $("#zoom_value").text(Math.round(this.zoom*100)+"%");
+            this.render();
+        },
+
+        render: function(){
+          $("#board").css('height', 1500*this.zoom).css('width', 3000*this.zoom);
+          $("#board-canvas").css('height', 1500*this.zoom).css('width', 3000*this.zoom)
+            .height(1500*this.zoom).width(3000*this.zoom);
+        },
+
         toggleUsers: function(e){
             e.preventDefault();
             $("#online_users_container").toggle("slow");

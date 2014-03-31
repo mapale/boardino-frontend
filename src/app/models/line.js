@@ -9,9 +9,9 @@ function(Backbone, Utils){
     var Line = Backbone.Model.extend({
         urlRoot: "api/boards/"+boardId+"/lines/",
 
-        initialize: function(){
+        initialize: function(){ this.zoom = 1; },
 
-        }
+        setZoom: function(zoom){ this.zoom = zoom; this.trigger('change:zoom'); }
     });
     return Line;
 });
