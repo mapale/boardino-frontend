@@ -1,10 +1,11 @@
 /* globals define:false, io:false, window:false, $:false */
 define("app/history",[
     'app/models/postit',
-    'app/models/text'
+    'app/models/text',
+    'app/models/line'
 ],
 
-function(Postit, Text) {
+function(Postit, Text, Line) {
 
     var History = function(boardView) {
         this.boardView = boardView;
@@ -75,6 +76,23 @@ function(Postit, Text) {
                     var line = lastAction.data;
                     this.boardView.deleteLine(line);
                     break;
+                case "deleted_line":
+                    var deletedLine = lastAction.data;
+                    var recreatedLine = new Line({
+                        path: deletedLine.get("path"),
+                        color_l: deletedLine.get("color_l"),
+                        stroke_w: deletedLine.get("stroke_w")
+                    });
+                    recreatedLine.type = deletedLine.type;
+
+                    this.boardView.canvas.drawLine(recreatedLine);
+                    var _aThis = this;
+                    this.boardView.canvas.saveLine(recreatedLine, {x: 1, y:1}, function(){
+                        _aThis.boardView.boardConnection.finishPath(recreatedLine.get("id"));
+                    });
+
+                    break;
+
                 case "added_postit":
                     var added_postit = lastAction.data;
                     added_postit.destroy();

@@ -75,7 +75,9 @@ function($, Backbone, History, PostitView, BoardCanvas, TextView, Board, Postit,
                   "height":120,
                   "text":""
                 });
-                this.addPostit(postit);
+                this.addPostit(postit, function(model){
+                    _this.history.add('added_postit', model);
+                });
             }
             if (this.tool === "text") {
               var text = new Text({
@@ -125,14 +127,14 @@ function($, Backbone, History, PostitView, BoardCanvas, TextView, Board, Postit,
         addAllTexts: function() {
             this.texts.each(this.addOneText, this);
         },
-        addPostit: function(postit) {
+        addPostit: function(postit, callback) {
           var _this = this;
           postit.setZoom(this.zoom);
           this.postits.add(postit);
           postit.save(null, {
               success: function(model, response){
                   _this.boardConnection.newPostit(model.get("id"), postit.get("x"), postit.get("y"), postit.get("width"), postit.get("height"), postit.get("text"));
-                  _this.history.add('added_postit', model);
+                  if (callback) { callback(model);}
               }
           });
           postit.trigger('focus');

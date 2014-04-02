@@ -26,12 +26,7 @@ function($, Backbone, _, paper, Line, LineList){
             paper.view.draw();
             this.lines.fetch({success: function(lineList){
                 _.each(lineList.models, function(line){
-                    if(line.get("path")){
-                        line.path = _this.drawLinePath(line);
-                        line.path.model = line;
-                    }
-                    line.bind('change:zoom', _this.render, _this);
-                    paper.view.draw();
+                    _this.drawLine(line);
                 });
             }});
         },
@@ -41,33 +36,40 @@ function($, Backbone, _, paper, Line, LineList){
         },
 
         startLine: function(x, y, type){
-          var line = new Line();
-          line.set("color_l",this.strokeColor);
-          line.type = type;
 
-          this.shadowPath = new paper.Path();
-          this.shadowPath.strokeColor = this.strokeColor;
-          this.shadowPath.dashArray = [10, 12];
+            var line = new Line();
+            line.set("color_l", this.strokeColor);
+            line.type = type;
 
-          var path = new paper.Path();
-          path.model = line;
+            var path = new paper.Path();
+            path.model = line;
+            path.strokeColor = line.get("color_l");
+            var start = new paper.Point(x, y);
+            path.add(start);
 
-          path.strokeColor = this.strokeColor;
-          var start = new paper.Point(x, y);
-          path.add(start);
-          this.shadowPath.add(start);
+            line.path = path;
 
-          var _this = this;
+            this.shadowPath = new paper.Path();
+            this.shadowPath.strokeColor = this.strokeColor;
+            this.shadowPath.dashArray = [10, 12];
+            this.shadowPath.add(start);
 
-          line.save({"stroke_w":1},{
-            success: function(model, response){
-              _this.line = model;
-              _this.line.path = path;
-              _this.lines.add(model);
-              _this.boardConnection.startPath(model.get("id"), x/_this.zoom, y/_this.zoom, model.get("color_l"));
-              paper.view.draw();
-            }
-          });
+            var _this = this;
+            this.saveLine(line, start, function(line){
+                _this.line = line;
+            });
+        },
+
+        saveLine: function(line, startPoint, callback){
+            var _this = this;
+            line.save({"stroke_w":1, path: this.serialize(line.path)},{
+                success: function(model, response){
+                    _this.lines.add(model);
+                    paper.view.draw();
+                    _this.boardConnection.startPath(model.get("id"), startPoint.x/_this.zoom, startPoint.y/_this.zoom, model.get("color_l"));
+                    if (callback) { callback(model); }
+                }
+            });
         },
 
         mouseMove: function(e){
@@ -121,6 +123,14 @@ function($, Backbone, _, paper, Line, LineList){
                 pathToSerialize.push(segmentToSerialize);
             });
             return JSON.stringify(pathToSerialize);
+        },
+
+        drawLine: function(line){
+            if(line.get("path")){
+                line.path = this.drawLinePath(line);
+                line.path.model = line;
+            }
+            paper.view.draw();
         },
 
         // Convert a line model to paper.pathObject
@@ -194,6 +204,7 @@ function($, Backbone, _, paper, Line, LineList){
             var hitResult = paper.project.hitTest(new paper.Point(x,y), hitOptions);
             if(hitResult){
                 this.deleteLine(hitResult.item.model);
+                this.history.add('deleted_line', hitResult.item.model);
             }
         },
 
