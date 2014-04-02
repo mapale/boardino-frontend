@@ -100,7 +100,8 @@ function($, MainView, BoardView, BoardCanvas, BoardConnection, BoardMessageHandl
                         boardView.clearLines();
                     },
                     "confirmable": true,
-                    "exclusive": false
+                    "exclusive": false,
+                    "keep_selected": false
             }));
 
             toolbar.addTool($("#rectline_tool").tool(toolbar, {
@@ -121,7 +122,8 @@ function($, MainView, BoardView, BoardCanvas, BoardConnection, BoardMessageHandl
                 "action": function(){
                     boardView.undo();
                 },
-                "exclusive": false
+                "exclusive": false,
+                "keep_selected": false
             }));
         }
   };

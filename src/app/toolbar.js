@@ -17,8 +17,9 @@ function($) {
         $.fn.tool = function(toolbar, options){
 
             var settings = $.extend({
-                                        'element': this,
-                                        'exclusive': true
+                'element': this,
+                'exclusive': true,
+                'keep_selected': true
             }, options);
 
             this.click(function(){
@@ -27,7 +28,9 @@ function($) {
                         otherTool.element.removeClass('tool_enabled');
                     });
                 }
-                $(this).addClass('tool_enabled');
+                if(settings.keep_selected){
+                    $(this).addClass('tool_enabled');
+                }
                 if(settings.confirmable){
                     $("#dialog").dialog({
                                             buttons : {
