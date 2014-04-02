@@ -17,6 +17,7 @@ function($, Backbone, _, paper, Line, LineList){
         initialize: function(attrs){
             this.boardConnection = attrs.boardConnection;
             this.zoom = attrs.zoom;
+            this.history = attrs.history;
             this.strokeColor = "black";
             var _this = this;
             var canvas = this.el;
@@ -97,7 +98,12 @@ function($, Backbone, _, paper, Line, LineList){
             }
             paper.view.draw();
             this.boardConnection.finishPath(this.line.get("id"));
-            this.line.save({path: this.serialize(this.line.path)});
+              var _this = this;
+            this.line.save({path: this.serialize(this.line.path)}, {
+                success: function(line){
+                    _this.history.add('added_line', line);
+                }
+            });
             this.lines.add(this.line);
             this.line = null;
           }
@@ -157,6 +163,7 @@ function($, Backbone, _, paper, Line, LineList){
             this.lines.get(id).fetch({success: function(line){
                 line.path.remove();
                 line.path = _this.drawLinePath(line);
+                line.path.model = line;
                 paper.view.draw();
             }});
         },
@@ -186,14 +193,18 @@ function($, Backbone, _, paper, Line, LineList){
             };
             var hitResult = paper.project.hitTest(new paper.Point(x,y), hitOptions);
             if(hitResult){
-                hitResult.item.remove();
-                this.boardConnection.deleteLine(hitResult.item.model.get("id"));
-                hitResult.item.model.destroy();
-                paper.view.draw();
+                this.deleteLine(hitResult.item.model);
             }
         },
 
-        deleteLine: function(id){
+        deleteLine: function(model){
+            model.path.remove();
+            this.boardConnection.deleteLine(model.get("id"));
+            model.destroy();
+            paper.view.draw();
+        },
+
+        onDeletedLine: function(id){
             var line = this.lines.get(id);
             if( line){
                 if (line.path) {

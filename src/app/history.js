@@ -71,6 +71,10 @@ function(Postit, Text) {
                     });
                     this.boardView.addText(text);
                     break;
+                case "added_line":
+                    var line = lastAction.data;
+                    this.boardView.deleteLine(line);
+                    break;
             }
         }
     };

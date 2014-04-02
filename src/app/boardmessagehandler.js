@@ -51,7 +51,7 @@ function($) {
                 if(args["obj"]==="postit") {
                     _this.boardView.deletePostit(args["id"]);
                 } else if(args["obj"]==="line") {
-                    _this.boardView.deleteLine(args["id"]);
+                    _this.boardView.onDeletedLine(args["id"]);
                 } else if(args["obj"]==="text") {
                   _this.boardView.deleteText(args["id"]);
                 }

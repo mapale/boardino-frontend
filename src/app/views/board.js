@@ -32,7 +32,11 @@ function($, Backbone, History, PostitView, BoardCanvas, TextView, Board, Postit,
           this.zoom = 1;
 
           this.tool = "postits";
-          this.canvas = new BoardCanvas({boardConnection: this.boardConnection, zoom: this.zoom});
+          this.canvas = new BoardCanvas({
+              boardConnection: this.boardConnection,
+              zoom: this.zoom,
+              history: this.history
+          });
           this.canvas.render();
 
           this.postits = new PostitList();
@@ -104,6 +108,7 @@ function($, Backbone, History, PostitView, BoardCanvas, TextView, Board, Postit,
             postit.setZoom(this.zoom);
             this.postits.add(postit);
         },
+
         showText: function(id){
           var _this = this;
           var text = new Text({id:id});
@@ -231,8 +236,12 @@ function($, Backbone, History, PostitView, BoardCanvas, TextView, Board, Postit,
             this.canvas.clearLines();
         },
 
-        deleteLine: function(id){
-            this.canvas.deleteLine(id);
+        deleteLine: function(line) {
+            this.canvas.deleteLine(line);
+        },
+
+        onDeletedLine: function(id){
+            this.canvas.onDeletedLine(id);
         },
 
         zoomIn: function(event){
