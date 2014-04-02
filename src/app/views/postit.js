@@ -97,7 +97,6 @@ function($, Backbone){
         deletePostit: function(){
             this.model.destroy();
             this.history.add('removed_postit', this.model);
-            this.boardConnection.deletePostit(this.model.get("id"));
         },
 
         createPostitTextArea: function(){
@@ -166,6 +165,7 @@ function($, Backbone){
             this.$el.fadeOut('fast', function(){
                 this.remove();
             });
+            this.boardConnection.deletePostit(this.model.get("id"));
         }
     });
     return PostitView;

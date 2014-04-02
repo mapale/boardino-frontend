@@ -75,6 +75,11 @@ function(Postit, Text) {
                     var line = lastAction.data;
                     this.boardView.deleteLine(line);
                     break;
+                case "added_postit":
+                    var added_postit = lastAction.data;
+                    added_postit.destroy();
+                    break;
+
             }
         }
     };

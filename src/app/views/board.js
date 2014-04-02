@@ -132,6 +132,7 @@ function($, Backbone, History, PostitView, BoardCanvas, TextView, Board, Postit,
           postit.save(null, {
               success: function(model, response){
                   _this.boardConnection.newPostit(model.get("id"), postit.get("x"), postit.get("y"), postit.get("width"), postit.get("height"), postit.get("text"));
+                  _this.history.add('added_postit', model);
               }
           });
           postit.trigger('focus');
