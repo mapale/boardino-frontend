@@ -15,6 +15,7 @@ define('app/views/text',[
     {
       this.boardConnection = options.boardConnection;
       this.zoom = options.zoom;
+      this.history = options.history;
       this.model.bind('change', this.render, this);
       this.model.bind('remove', this.remove, this);
       this.model.bind('change:zoom', this.render, this);
@@ -99,6 +100,7 @@ define('app/views/text',[
     },
     deleteText: function() {
       this.remove();
+      this.history.add('removed_text', this.model);
       this.model.destroy();
       this.boardConnection.deleteText(this.model.get("id"));
     }

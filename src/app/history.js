@@ -1,9 +1,9 @@
 /* globals define:false, io:false, window:false, $:false */
 define("app/history",[
-    'jquery'
+    'app/models/postit'
 ],
 
-function($) {
+function(Postit) {
 
     var History = function(boardView) {
         this.boardView = boardView;
@@ -48,10 +48,20 @@ function($) {
     History.prototype.undo = function() {
         var lastAction = this.pop();
         if (lastAction) {
-            console.log("undo "+ lastAction.action);
             switch(lastAction.action) {
-                case "remove_postit":
-                    this.boardView.addOne(lastAction.data);
+                case "removed_postit":
+                    var postit = new Postit({
+                        "x":lastAction.data.get("x"),
+                        "y":lastAction.data.get("y"),
+                        "width":lastAction.data.get("width"),
+                        "height":lastAction.data.get("height"),
+                        "back_color": lastAction.data.get("back_color"),
+                        "text":lastAction.data.get("text")
+                    });
+                    this.boardView.addPostit(postit);
+                    break;
+                case "removed_text":
+                    this.boardView.addOneText(lastAction.data);
                     break;
             }
         }

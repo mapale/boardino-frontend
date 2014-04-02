@@ -27,7 +27,7 @@ function($, Backbone, History, PostitView, BoardCanvas, TextView, Board, Postit,
         },
 
         initialize: function(attrs){
-          this.history = new History();
+          this.history = new History(this);
           this.boardConnection = attrs.boardConnection;
           this.zoom = 1;
 
@@ -64,15 +64,14 @@ function($, Backbone, History, PostitView, BoardCanvas, TextView, Board, Postit,
             }
             var _this = this;
             if (this.tool === "postits") {
-                var postit = new Postit({"x":Math.round(e.pageX/_this.zoom), "y":Math.round(e.pageY/_this.zoom), "width":120, "height":120, "text":""});
-                postit.setZoom(_this.zoom);
-                this.postits.add(postit);//TODO: check what is this doing
-                postit.save(null, {
-                    success: function(model, response){
-                        _this.boardConnection.newPostit(model.get("id"), postit.get("x"), postit.get("y"), postit.get("width"), postit.get("height"), postit.get("text"));
-                    }
+                var postit = new Postit({
+                  "x":Math.round(e.pageX/_this.zoom),
+                  "y":Math.round(e.pageY/_this.zoom),
+                  "width":120,
+                  "height":120,
+                  "text":""
                 });
-                postit.trigger('focus');
+                this.addPostit(postit);
             }
             if (this.tool === "text") {
               var text = new Text({
@@ -130,6 +129,17 @@ function($, Backbone, History, PostitView, BoardCanvas, TextView, Board, Postit,
         addAllTexts: function() {
             this.texts.each(this.addOneText, this);
         },
+        addPostit: function(postit) {
+          var _this = this;
+          postit.setZoom(this.zoom);
+          this.postits.add(postit);
+          postit.save(null, {
+              success: function(model, response){
+                  _this.boardConnection.newPostit(model.get("id"), postit.get("x"), postit.get("y"), postit.get("width"), postit.get("height"), postit.get("text"));
+              }
+          });
+          postit.trigger('focus');
+        },
         addOne: function(postit){
             var view = new PostitView({
                 model: postit,
@@ -140,7 +150,12 @@ function($, Backbone, History, PostitView, BoardCanvas, TextView, Board, Postit,
             $("#board").append(view.render().el);
         },
         addOneText: function(text){
-          var view = new TextView({model: text, boardConnection: this.boardConnection, zoom: this.zoom});
+          var view = new TextView({
+            model: text,
+            boardConnection: this.boardConnection,
+            zoom: this.zoom,
+            history: this.history
+          });
           $("#board").append(view.render().el);
         },
         movePostit: function(id, newX, newY){
