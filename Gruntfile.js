@@ -105,7 +105,7 @@ module.exports = function(grunt) {
         files: [{
           expand: true,
           cwd: 'styles',
-          src: ['*.scss'],
+          src: ['*.sass'],
           dest: '../boardino/static/css',
           ext: '.css'
         }]
