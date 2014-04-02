@@ -65,10 +65,6 @@ function($, MainView, BoardView, BoardCanvas, BoardConnection, BoardMessageHandl
             }));
 
             toolbar.addTool($("#pencil_black_tool").tool(toolbar, {
-                    "action": function(){}
-            }));
-
-            toolbar.addTool($("#pencil_black_tool").tool(toolbar, {
                     "action": function(){
                         $("#board").css('cursor','url(/static/images/pencil_disabled.ico),default');
                         boardView.selectPencilTool("black");
@@ -114,12 +110,19 @@ function($, MainView, BoardView, BoardCanvas, BoardConnection, BoardMessageHandl
                     }
             }));
 
-          toolbar.addTool($("#text_tool").tool(toolbar, {
-            "action": function(){
-                $("#board").css('cursor','crosshair');
-                boardView.selectTextTool();
-            }
-          }));
+            toolbar.addTool($("#text_tool").tool(toolbar, {
+                    "action": function(){
+                        $("#board").css('cursor','crosshair');
+                        boardView.selectTextTool();
+                    }
+            }));
+
+            toolbar.addTool($("#undo-tool").tool(toolbar, {
+                "action": function(){
+                    boardView.undo();
+                },
+                "exclusive": false
+            }));
         }
   };
 

@@ -19,6 +19,7 @@ function($, Backbone){
         initialize: function(attrs){
             this.boardConnection = attrs.boardConnection;
             this.zoom = attrs.zoom;
+            this.history = attrs.history;
             this.model.bind('change', this.render, this);
             this.model.bind('destroy', this.doRemove, this);
             this.model.bind('remove', this.doRemove, this);
@@ -95,6 +96,7 @@ function($, Backbone){
 
         deletePostit: function(){
             this.model.destroy();
+            this.history.add('removed_postit', this.model);
             this.boardConnection.deletePostit(this.model.get("id"));
         },
 

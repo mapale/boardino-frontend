@@ -2,6 +2,7 @@
 define('app/views/board',[
   'jquery',
   'backbone',
+  'app/history',
   'app/views/postit',
   'app/views/canvas',
   'app/views/text',
@@ -12,7 +13,7 @@ define('app/views/board',[
   'app/collections/texts'
 ], 
 
-function($, Backbone, PostitView, BoardCanvas, TextView, Board, Postit, Text, PostitList, TextList){
+function($, Backbone, History, PostitView, BoardCanvas, TextView, Board, Postit, Text, PostitList, TextList){
     var BoardView = Backbone.View.extend({
         el: $("#board"),
 
@@ -26,6 +27,7 @@ function($, Backbone, PostitView, BoardCanvas, TextView, Board, Postit, Text, Po
         },
 
         initialize: function(attrs){
+          this.history = new History();
           this.boardConnection = attrs.boardConnection;
           this.zoom = 1;
 
@@ -129,7 +131,12 @@ function($, Backbone, PostitView, BoardCanvas, TextView, Board, Postit, Text, Po
             this.texts.each(this.addOneText, this);
         },
         addOne: function(postit){
-            var view = new PostitView({model: postit, boardConnection: this.boardConnection, zoom: this.zoom});
+            var view = new PostitView({
+                model: postit,
+                boardConnection: this.boardConnection,
+                zoom: this.zoom,
+                history: this.history
+            });
             $("#board").append(view.render().el);
         },
         addOneText: function(text){
@@ -241,6 +248,10 @@ function($, Backbone, PostitView, BoardCanvas, TextView, Board, Postit, Text, Po
         toggleUsers: function(e){
             e.preventDefault();
             $("#online_users_container").toggle("slow");
+        },
+
+        undo: function() {
+            this.history.undo();
         }
     });
 
