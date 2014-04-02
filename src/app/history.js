@@ -1,9 +1,10 @@
 /* globals define:false, io:false, window:false, $:false */
 define("app/history",[
-    'app/models/postit'
+    'app/models/postit',
+    'app/models/text'
 ],
 
-function(Postit) {
+function(Postit, Text) {
 
     var History = function(boardView) {
         this.boardView = boardView;
@@ -13,14 +14,14 @@ function(Postit) {
     };
 
     History.prototype.push = function(data) {
-        if(this.isFull() === false) {
+        // if(this.isFull() === false) {
             this.stacker[this.pointer] = data;
             this.pointer++;
             return true;
-        }
-        else {
-            return false;
-        }
+        // }
+        // else {
+        //     return false;
+        // }
     };
       
     History.prototype.pop = function() {
@@ -51,17 +52,24 @@ function(Postit) {
             switch(lastAction.action) {
                 case "removed_postit":
                     var postit = new Postit({
-                        "x":lastAction.data.get("x"),
-                        "y":lastAction.data.get("y"),
-                        "width":lastAction.data.get("width"),
-                        "height":lastAction.data.get("height"),
+                        "x": lastAction.data.get("x"),
+                        "y": lastAction.data.get("y"),
+                        "width": lastAction.data.get("width"),
+                        "height": lastAction.data.get("height"),
                         "back_color": lastAction.data.get("back_color"),
-                        "text":lastAction.data.get("text")
+                        "text": lastAction.data.get("text")
                     });
                     this.boardView.addPostit(postit);
                     break;
                 case "removed_text":
-                    this.boardView.addOneText(lastAction.data);
+                    var text = new Text({
+                        text: lastAction.data.get("text"),
+                        x: lastAction.data.get("x"),
+                        y: lastAction.data.get("y"),
+                        width: lastAction.data.get("width"),
+                        height: lastAction.data.get("height"),
+                    });
+                    this.boardView.addText(text);
                     break;
             }
         }

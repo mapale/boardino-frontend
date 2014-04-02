@@ -81,16 +81,7 @@ function($, Backbone, History, PostitView, BoardCanvas, TextView, Board, Postit,
                 width: 150,
                 height: 50
               });
-              text.setZoom(_this.zoom);
-              this.texts.add(text);
-              var view = new TextView({model: text, boardConnection: this.boardConnection, zoom: _this.zoom});
-              $("#board").append(view.render().el);
-
-              text.save(null, {
-                success: function(model, response){
-                  _this.boardConnection.newText(model.get("id"), text.get("x"), text.get("y"), text.get("width"), text.get("height"), text.get("text"));
-                }
-              });
+              this.addText(text);
             }
             return false;
         },
@@ -148,6 +139,18 @@ function($, Backbone, History, PostitView, BoardCanvas, TextView, Board, Postit,
                 history: this.history
             });
             $("#board").append(view.render().el);
+        },
+        addText: function(text) {
+          var _this = this;
+          text.setZoom(this.zoom);
+          this.texts.add(text);
+          var view = new TextView({model: text, boardConnection: this.boardConnection, zoom: _this.zoom, history: this.history});
+          $("#board").append(view.render().el);
+          text.save(null, {
+            success: function(model, response){
+              _this.boardConnection.newText(model.get("id"), text.get("x"), text.get("y"), text.get("width"), text.get("height"), text.get("text"));
+            }
+          });
         },
         addOneText: function(text){
           var view = new TextView({
