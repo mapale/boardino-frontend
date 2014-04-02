@@ -67,7 +67,7 @@ function(Postit, Text) {
                         x: lastAction.data.get("x"),
                         y: lastAction.data.get("y"),
                         width: lastAction.data.get("width"),
-                        height: lastAction.data.get("height"),
+                        height: lastAction.data.get("height")
                     });
                     this.boardView.addText(text);
                     break;
@@ -79,7 +79,15 @@ function(Postit, Text) {
                     var added_postit = lastAction.data;
                     added_postit.destroy();
                     break;
-
+                case "changed_postit_color":
+                    var changedPostit = lastAction.data.postit;
+                    var prevColor = lastAction.data.prevColor;
+                    var _this = this;
+                    changedPostit.save({"back_color": prevColor}, {
+                        success: function(){
+                            _this.boardView.boardConnection.changePostitColor(changedPostit.get("id"), prevColor, prevColor);
+                        }
+                    });
             }
         }
     };

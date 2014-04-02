@@ -142,9 +142,20 @@ function($, Backbone){
                     .css('background-color', color)
                     .css('float', position)
                     .click(function() {
-                        _this.model.save({"back_color": color});
-                        _this.boardConnection.changePostitColor(_this.model.get("id"), color, color);
+                        var prevColor = _this.model.get("back_color");
+                        _this.changePostitColor(color, function(postit){
+                            _this.history.add('changed_postit_color', {postit: _this.model, prevColor: prevColor});
+                        });
                     });
+        },
+
+        changePostitColor: function(newColor, callback) {
+            this.model.save({"back_color": newColor}, {
+                success: function(postit){
+                    if (callback) { callback(postit); }
+                }
+            });
+            this.boardConnection.changePostitColor(this.model.get("id"), newColor, newColor);
         },
 
         showToolbar: function(){
