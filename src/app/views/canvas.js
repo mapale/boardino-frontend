@@ -119,9 +119,14 @@ function($, Backbone, _, paper, Line, LineList){
 
         // Convert a line model to paper.pathObject
         drawLinePath: function(line){
+            var _this = this;
             var path = new paper.Path();
             path.strokeColor = line.get("color_l");
             $.each($.parseJSON(line.get("path")), function(i, segment){
+                segment.point.x = segment.point.x * _this.zoom;
+                segment.point.y = segment.point.y * _this.zoom;
+                segment.handleIn.x = segment.handleIn.x * _this.zoom;
+                segment.handleOut.y = segment.handleOut.y * _this.zoom;
                 path.add(new paper.Segment(segment.point, segment.handleIn, segment._handleOut));
             });
             return path;
