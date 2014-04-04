@@ -20,10 +20,7 @@ function($, Backbone, History, PostitView, BoardCanvas, TextView, Board, Postit,
         events: {
             "mousedown #board-canvas": "mousedown",
             "mousemove": "mouseMove",
-            "mouseup": "mouseUp",
-            "click #zoom_in": "zoomIn",
-            "click #zoom_out": "zoomOut",
-            "click #connected_users_btn": "toggleUsers"
+            "mouseup": "mouseUp"
         },
 
         initialize: function(attrs){
@@ -273,11 +270,6 @@ function($, Backbone, History, PostitView, BoardCanvas, TextView, Board, Postit,
           $("#board").css('height', 1500*this.zoom).css('width', 3000*this.zoom);
           $("#board-canvas").css('height', 1500*this.zoom).css('width', 3000*this.zoom)
             .height(1500*this.zoom).width(3000*this.zoom);
-        },
-
-        toggleUsers: function(e){
-            e.preventDefault();
-            $("#online_users_container").toggle("slow");
         },
 
         undo: function() {

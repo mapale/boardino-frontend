@@ -18,7 +18,10 @@ define('app/views/main',[
       "click #set-password": "showSetPasswordModal",
       "click #set-alias": "showSetAliasModal",
       "click #set-password-btn": "setBoardPassword",
-      "click #set-alias-btn": "setBoardAlias"
+      "click #set-alias-btn": "setBoardAlias",
+      "click #zoom_in": "zoomIn",
+      "click #zoom_out": "zoomOut",
+      "click #connected_users_btn": "toggleUsers"
     },
     initialize: function(attrs){
       this.boardView = attrs.boardView;
@@ -107,7 +110,20 @@ define('app/views/main',[
           }
         );
       }
-    }
+    },
+
+      zoomIn: function(event){
+          this.boardView.zoomIn(event);
+      },
+
+      zoomOut: function(event){
+          this.boardView.zoomOut(event);
+      },
+
+      toggleUsers: function(e){
+          e.preventDefault();
+          $("#online_users_container").toggle("slow");
+      }
   });
   return MainView;
 });
