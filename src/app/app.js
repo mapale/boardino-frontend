@@ -49,7 +49,8 @@ function($, MainView, BoardView, BoardCanvas, BoardConnection, BoardMessageHandl
           });
 
           $(window).bind("beforeunload", function() {
-            boardConnection.disconnect();
+              saveScreenshot();
+              boardConnection.disconnect();
           });
         });
 
@@ -133,26 +134,32 @@ function($, MainView, BoardView, BoardCanvas, BoardConnection, BoardMessageHandl
 
             toolbar.addTool($("#save-tool").tool(toolbar, {
                 "action": function(e){
-                    html2canvas(document.getElementById("board"), {
-                        background: '#fff',
-                        onrendered: function(canvas) {
-                            var extra_canvas = document.createElement("canvas");
-                            extra_canvas.setAttribute('width', 300);
-                            extra_canvas.setAttribute('height', 150);
-                            var ctx = extra_canvas.getContext('2d');
-                            ctx.drawImage(canvas,0,0,canvas.width, canvas.height,0,0,300,150);
-                            var dataURL = extra_canvas.toDataURL();
-                            board.save({screenshot: dataURL}, {
-                                success: function(board){
-                                    document.location.href = document.location.href + ".png";
-                                }
-                            });
-                        }
+                    saveScreenshot(function(board){
+                        document.location.href = document.location.href + ".png";
                     });
                 },
                 "exclusive": false,
                 "keep_selected": false
             }));
+        }
+
+        function saveScreenshot(callback){
+            html2canvas(document.getElementById("board"), {
+                background: '#fff',
+                onrendered: function(canvas) {
+                    var extra_canvas = document.createElement("canvas");
+                    extra_canvas.setAttribute('width', 300);
+                    extra_canvas.setAttribute('height', 150);
+                    var ctx = extra_canvas.getContext('2d');
+                    ctx.drawImage(canvas,0,0,canvas.width, canvas.height,0,0,300,150);
+                    var dataURL = extra_canvas.toDataURL();
+                    board.save({screenshot: dataURL}, {
+                        success: function(board){
+                            if (callback) { callback(board);}
+                        }
+                    });
+                }
+            });
         }
   };
 
