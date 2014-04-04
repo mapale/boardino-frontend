@@ -20,7 +20,8 @@
     "afterEach"  : false,
     "expect"     : false,
     "spyOn"      : false,
-    "window"     : false
+    "window"     : false,
+    "html2canvas": false
   }
 }
 

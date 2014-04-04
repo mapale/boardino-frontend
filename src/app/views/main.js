@@ -22,18 +22,14 @@ define('app/views/main',[
     },
     initialize: function(attrs){
       this.boardView = attrs.boardView;
-      var boardId = attrs.boardId;
-      this.board = new Board({id: boardId});
+      this.board = attrs.board;
       this.menu = $("#menu");
       this.menu.menu();
       $("#set-password-modal").modal({show:false});
       $("#set-alias-modal").modal({show:false});
     },
     render: function() {
-      var _this = this;
-      this.board.fetch({success: function(){
-        _this.boardView.render();
-      }});
+      this.boardView.render();
     },
     showMenu: function() {
         clearTimeout(this.menu.data('timeoutId'));

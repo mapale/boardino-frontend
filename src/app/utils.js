@@ -13,7 +13,7 @@ function(Backbone, UserProfile){
 
     return {
 
-        getBoardId: getBoardId,
+        getBoardId: getBoardId
         
     };
     
