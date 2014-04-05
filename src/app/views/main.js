@@ -28,8 +28,20 @@ define('app/views/main',[
       this.board = attrs.board;
       this.menu = $("#menu");
       this.menu.menu();
+      var _this = this;
       $("#set-password-modal").modal({show:false});
       $("#set-alias-modal").modal({show:false});
+        $( "#zoom-slider" ).slider({
+            orientation: "vertical",
+            min: 0.2,
+            max: 2,
+            value: 1,
+            step: 0.1,
+            slide: function( event, ui ) {
+                _this.boardView.setZoom(ui.value);
+                //$( "#amount" ).val( ui.value );
+            }
+        });
     },
     render: function() {
       this.boardView.render();
@@ -113,11 +125,13 @@ define('app/views/main',[
     },
 
       zoomIn: function(event){
-          this.boardView.zoomIn(event);
+          var zoom = this.boardView.zoomIn(event);
+          $( "#zoom-slider" ).slider("value", zoom);
       },
 
       zoomOut: function(event){
-          this.boardView.zoomOut(event);
+          var zoom = this.boardView.zoomOut(event);
+          $( "#zoom-slider" ).slider("value", zoom);
       },
 
       toggleUsers: function(e){

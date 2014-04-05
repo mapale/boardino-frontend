@@ -70,6 +70,7 @@ body
     cursor: pointer
     padding: 2px 2px 25px 2px
     position: absolute
+    z-index: 1
 
 .postit_close_image
     display: none
@@ -187,20 +188,20 @@ body
 #boardino_logo
     position: fixed
     right: 15px
-    top: 15px
+    bottom: 15px
 
 #online_users_container, #online_users_indicator, #notifications, #zoom
     display: none
     max-width: 300px
     position: fixed
     right: 5px
-    top: 190px
+    top: 200px
     z-index: 10000
 
 #online_users_indicator
     display: block
     text-align: center
-    top: 100px
+    top: 140px
     a
         color: $black
         font-size: 18px
@@ -214,7 +215,20 @@ body
     top: 120px
 
 #zoom
-    top: 80px
+    top: 10px
+    span
+        color: #3a3c42
+
+#zoom_in
+    margin-bottom: 2px
+
+#zoom-slider
+    float: right
+
+.ui-slider-vertical .ui-slider-handle
+    background: #3a3c42
+    border-color: #3a3c42
+    cursor: pointer
 
 .user_connected, .user_disconnected
     background-color: $bg_user

@@ -246,23 +246,22 @@ function($, Backbone, History, PostitView, BoardCanvas, TextView, Board, Postit,
 
         zoomIn: function(event){
             event.preventDefault();
-            if(this.zoom < 2) { this.zoom += 0.1; }
-            var _this = this;
-            this.postits.each(function(postit){ postit.setZoom(_this.zoom); });
-            this.texts.each(function(text){ text.setZoom(_this.zoom); });
-            this.canvas.setZoom(this.zoom);
-            $("#zoom_value").text(Math.round(this.zoom*100)+"%");
-            this.render();
+            if(this.zoom < 2) { this.setZoom(this.zoom + 0.1); }
+            return this.zoom;
         },
 
         zoomOut: function(event){
             event.preventDefault();
-            if(this.zoom > 0.25) { this.zoom -= 0.1; }
-            var _this = this;
-            this.postits.each(function(postit){ postit.setZoom(_this.zoom); });
-            this.texts.each(function(text){ text.setZoom(_this.zoom); });
+            if(this.zoom > 0.25) { this.setZoom(this.zoom - 0.1); }
+            return this.zoom;
+        },
+
+        setZoom: function(zoom){
+            this.zoom = zoom;
+            this.postits.each(function(postit){ postit.setZoom(zoom); });
+            this.texts.each(function(text){ text.setZoom(zoom); });
             this.canvas.setZoom(this.zoom);
-            $("#zoom_value").text(Math.round(this.zoom*100)+"%");
+            $("#zoom_value").text(Math.round(zoom*100)+"%");
             this.render();
         },
 
