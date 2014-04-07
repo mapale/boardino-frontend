@@ -3,9 +3,15 @@ $bg_nav: #365FA5
 
 /* Move down content because we have a fixed navbar that is 50px tall */
 body
-    background-image: linear-gradient(rgba(200, 200, 200, 0.20) 1px, transparent 1px), linear-gradient(90deg, rgba(200, 200, 200, 0.20) 1px, transparent 1px)
-    background-position: -2px -2px, -2px -2px, -1px -1px, -1px -1px
-    background-size: 28px 28px, 28px 28px, 20px 20px, 20px 20px
+    // background-image: linear-gradient(rgba(200, 200, 200, 0.20) 1px, transparent 1px), linear-gradient(90deg, rgba(200, 200, 200, 0.20) 1px, transparent 1px)
+    // background-position: -2px -2px, -2px -2px, -1px -1px, -1px -1px
+    // background-size: 28px 28px, 28px 28px, 20px 20px, 20px 20px
+    background: url(/static/images/back.jpg) no-repeat center center fixed
+    -webkit-background-size: cover
+    -moz-background-size: cover
+    -o-background-size: cover
+    background-size: cover
+    color: #111
     font-family: $font
     height: 100%
     padding-bottom: 20px
@@ -23,7 +29,7 @@ h2
     .navbar-brand
         font-size: 2em
     .navbar-brand, .navbar-nav>li>a
-        color: white
+        color: #fff
     .navbar-nav>li>a:hover
         color: #ccc
 
@@ -35,6 +41,7 @@ h2
     margin: 1em
     position: absolute
     right: 6.6%
+    top: 5em
 
 .btn-primary
     background: $bg_nav
@@ -69,6 +76,10 @@ h2
         padding-top: 3em
     .jumbotron
         margin: 3em auto
+
+@media only screen and (max-width: 800px)
+    .navbar-form input
+        width: 120px
 
 @media only screen and (max-width: 600px)
     #about
