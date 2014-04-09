@@ -1,18 +1,11 @@
 $font: 'Walter Turncoat', cursive
-$bg_nav: #365FA5
-$color: #111
 
-/* Move down content because we have a fixed navbar that is 50px tall */
 body
-    // background-image: linear-gradient(rgba(200, 200, 200, 0.20) 1px, transparent 1px), linear-gradient(90deg, rgba(200, 200, 200, 0.20) 1px, transparent 1px)
-    // background-position: -2px -2px, -2px -2px, -1px -1px, -1px -1px
-    // background-size: 28px 28px, 28px 28px, 20px 20px, 20px 20px
     background: url(/static/images/back.jpg) no-repeat center center fixed
     -webkit-background-size: cover
     -moz-background-size: cover
     -o-background-size: cover
     background-size: cover
-    color: $color
     font-family: $font
     height: 100%
     padding-bottom: 20px
@@ -24,31 +17,22 @@ h2
     margin-bottom: 1em
     text-align: center
 
-.navbar
-    background: $bg_nav
-    border: 1px solid $bg_nav
-    .navbar-brand
-        font-size: 2em
-    .navbar-brand, .navbar-nav>li>a
-        color: #fff
-    .navbar-nav>li>a:hover
-        color: $color
-
 small
     opacity: .5
 
-.btn-primary
-    background: $bg_nav
+#about a
+    color: #111
+    text-decoration: underline
 
-.btn-success
-    background: #66AF22
+.navbar
+    .navbar-brand
+        font-size: 2em
 
 .container, .jumbotron
     height: 100%
     min-height: 100%
 
 .jumbotron
-    background: transparent
     height: 100%
     min-height: 100%
     text-align: center
