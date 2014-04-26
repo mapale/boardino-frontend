@@ -155,8 +155,13 @@ define('app/views/main',[
           $.post("/api/boards/" + this.board.get("hash") + "/invite/", {
               "username": $("#invited-username").val()
           }, function(response){
-
-          }, 'json');
+              $("#invite-success").show();
+              $("#invite-success-msg").text(response.message);
+          }, 'json').fail(function(xhr, status, error){
+                  var response = JSON.parse(xhr.responseText);
+                  $("#invite-error").show();
+                  $("#invite-error-msg").text(response.message);
+              });
       },
 
       zoomIn: function(event){
