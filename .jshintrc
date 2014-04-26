@@ -21,7 +21,8 @@
     "expect"     : false,
     "spyOn"      : false,
     "window"     : false,
-    "html2canvas": false
+    "html2canvas": false,
+    "document": false
   }
 }
 
