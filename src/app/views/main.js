@@ -36,6 +36,11 @@ define('app/views/main',[
       $("#set-private-modal").modal({show:false});
       $("#set-alias-modal").modal({show:false});
         $("#invite-modal").modal({show:false});
+        $('#invite-modal').on('hidden.bs.modal', function (e) {
+            $("#invite-error").hide();
+            $("#invite-success").hide();
+            $("#invited-username").val("");
+        });
         $( "#zoom-slider" ).slider({
             orientation: "vertical",
             min: 0.2,
@@ -155,10 +160,12 @@ define('app/views/main',[
           $.post("/api/boards/" + this.board.get("hash") + "/invite/", {
               "username": $("#invited-username").val()
           }, function(response){
+              $("#invite-error").hide();
               $("#invite-success").show();
               $("#invite-success-msg").text(response.message);
           }, 'json').fail(function(xhr, status, error){
                   var response = JSON.parse(xhr.responseText);
+                  $("#invite-success").hide();
                   $("#invite-error").show();
                   $("#invite-error-msg").text(response.message);
               });
